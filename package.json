@@ -1,6 +1,6 @@
 {
-  "name": "objectstream",
-  "version": "0.0.1",
+  "name": "@sergdudko/objectstream",
+  "version": "0.0.2",
   "description": "Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "jsonstringify"
   ],
   "author": "Siarhei Dudko",
-  "license": "custom",
+  "license": "MIT",
   "homepage": "https://github.com/siarheidudko/objectstream.git#readme",
   "dependencies": {
     "stream": "0.0.2"
