@@ -53,54 +53,49 @@ let Parser = function(){
 				charArr = string.split('');
 			}
 			if(charArr.length > 0){
-				let parseSymbol = function(s){
-					if(s < charArr.length){
-						switch(charArr[s]){
-							case '{':
-								self.LeftBrace++;
-								self.StringBuffer = self.StringBuffer + charArr[s];
-								break;
-							case '}':
-								self.RightBrace++;
-								self.StringBuffer = self.StringBuffer + charArr[s];
-								break;
-							case '\0':
-						//	case '\a':
-							case '\b':
-							case '\t':
-							case '\n':
-							case '\v':
-							case '\f':
-							case '\r':
-						//	case '\e':
-								if(self.OpenQuotes && (self.LeftBrace !== 0)){ self.StringBuffer = self.StringBuffer + charArr[s]; }
-								break;
-							case '"':
-								if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
-									self.OpenQuotes = true;
-								}
-							default:
-								if(self.LeftBrace !== 0) { self.StringBuffer = self.StringBuffer + charArr[s]; }
-								break;
-						}
-						if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
-							try{
-								let _object = JSON.parse(self.StringBuffer);
-								self.Transform.push(_object);
-							} catch(err){
-								error.push(err);
-							} finally {
-								self.clear();
-								parseSymbol(++s);
+				for(let s = 0; s < charArr.length; s++){
+					switch(charArr[s]){
+						case '{':
+							self.LeftBrace++;
+							self.StringBuffer = self.StringBuffer + charArr[s];
+							break;
+						case '}':
+							self.RightBrace++;
+							self.StringBuffer = self.StringBuffer + charArr[s];
+							break;
+						case '\0':
+					//	case '\a':
+						case '\b':
+						case '\t':
+						case '\n':
+						case '\v':
+						case '\f':
+						case '\r':
+					//	case '\e':
+							if(self.OpenQuotes && (self.LeftBrace !== 0)){ self.StringBuffer = self.StringBuffer + charArr[s]; }
+							break;
+						case '"':
+							if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
+								self.OpenQuotes = true;
 							}
-						} else if(self.LeftBrace < self.RightBrace){
+						default:
+							if(self.LeftBrace !== 0) { self.StringBuffer = self.StringBuffer + charArr[s]; }
+							break;
+					}
+					if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
+						try{
+							let _object = JSON.parse(self.StringBuffer);
+							self.Transform.push(_object);
+						} catch(err){
+							error.push(err);
+						} finally {
 							self.clear();
-							error.push(new Error('Parsing error, clear buffer!'));
-							parseSymbol(++s);
-						} else {
-							parseSymbol(++s);
 						}
-					} else {
+					} else if(self.LeftBrace < self.RightBrace){
+						self.clear();
+						error.push(new Error('Parsing error, clear buffer!'));
+					}
+					if(s === (charArr.length -1)){
 						if(error.length > 0){
 							return callback(error);
 						} else {
@@ -108,7 +103,6 @@ let Parser = function(){
 						}
 					}
 				};
-				parseSymbol(0);
 			} else {
 				return callback(new Error('Incoming data type is '+typeof(charArr)+', require data type is String or Buffer!'));
 			}
