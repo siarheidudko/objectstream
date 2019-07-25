@@ -4,7 +4,7 @@
   "description": "Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test2.js"
   },
   "author": "Siarhei Dudko",
   "license": "MIT",
