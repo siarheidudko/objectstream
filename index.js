@@ -15,7 +15,8 @@ let Stringifer = function(){
 			if(typeof(object) === 'object'){
 				if(!Array.isArray(object)){
 					try{
-						self.Transform.push(JSON.stringify(object));
+						let _string = JSON.stringify(object);
+						self.Transform.push(_string);
 						return callback();
 					} catch(err){
 						return callback(err);
@@ -63,23 +64,25 @@ let Parser = function(){
 							self.RightBrace++;
 							self.StringBuffer = self.StringBuffer + charArr[s];
 							break;
-						case '\0':
-					//	case '\a':
 						case '\b':
 						case '\t':
 						case '\n':
-						case '\v':
 						case '\f':
 						case '\r':
-					//	case '\e':
-							if(self.OpenQuotes && (self.LeftBrace !== 0)){ self.StringBuffer = self.StringBuffer + charArr[s]; }
+						case '\0':
+						case '\v':
+							if(self.OpenQuotes && (self.LeftBrace !== 0)){ 
+								self.StringBuffer = self.StringBuffer + '\\u'+('0000' + charArr[s].charCodeAt(0).toString(16)).slice(-4);
+							}
 							break;
 						case '"':
 							if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
 								self.OpenQuotes = true;
 							}
 						default:
-							if(self.LeftBrace !== 0) { self.StringBuffer = self.StringBuffer + charArr[s]; }
+							if(self.LeftBrace !== 0) {
+								self.StringBuffer = self.StringBuffer + charArr[s]; 
+							}
 							break;
 					}
 					if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
