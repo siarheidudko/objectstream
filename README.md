@@ -1,5 +1,5 @@
 ﻿
-# sergdudko/objectstream
+# @sergdudko/objectstream
 Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.. 
 
 [![npm](https://img.shields.io/npm/v/@sergdudko/objectstream.svg)](https://www.npmjs.com/package/@sergdudko/objectstream)
@@ -21,7 +21,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ## Use
     
 ```
-	let ObjectStream = require('objectstream');
+	let ObjectStream = require('@sergdudko/objectstream');
 	let objectStream = new ObjectStream();
 	
 	objectStream.Stringifer.on('data', function(data){
@@ -64,7 +64,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
     
 ## Alternative  
 ```
-	let objectStream = require('objectstream')();
+	let objectStream = require('@sergdudko/objectstream')();
 	let Stringifer = new objectStream.Stringifer();
 	let Parser = new objectStream.Parser();	
 	
@@ -108,7 +108,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 
 ## TEST  
 ```
-	let ObjectStream = require('objectstream');
+	let ObjectStream = require('@sergdudko/objectstream');
 
 	const start = '[',
 		  sep = ',',
