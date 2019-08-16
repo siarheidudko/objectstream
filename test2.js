@@ -6,9 +6,13 @@
  
 let ObjectStream = require('./index.js');
 
+const start = '[',
+	  sep = ',',
+	  end = ']';
+
 let objectstream = {
-	Stringifer: new (ObjectStream().Stringifer)(),
-	Parser: new (ObjectStream().Parser)()
+	Stringifer: new (ObjectStream().Stringifer)(start, sep, end),
+	Parser: new (ObjectStream().Parser)(start, sep, end)
 };
 
 const object = {
@@ -22,18 +26,24 @@ const object = {
 }
 const string = JSON.stringify(object);
 
+let nstring = '';
 objectstream.Stringifer.on('data', function(data){
-	console.table({in:string, out:data});
-	if(data === string){
+	if(data)
+		nstring += data;
+});
+objectstream.Stringifer.on('error', function(data){
+	console.error(data);
+});
+objectstream.Stringifer.on('end', function(data){
+	if(data)
+		nstring += data;
+	console.table({in:start+string+end, out:nstring});
+	if(start+string+end === nstring){
 		console.log('******************** Test Stringifer is succeed! ********************');
 	} else {
 		console.error('****************** Test Stringifer is not succeed! ******************');
 	}
 });
-objectstream.Stringifer.on('error', function(data){
-	console.error(data);
-});
-objectstream.Stringifer.on('end', function(){});
 objectstream.Stringifer.on('finish', function(){});
 
 objectstream.Parser.on('data', function(data){
@@ -82,6 +92,13 @@ objectstream.Parser.on('error', function(data){
 objectstream.Parser.on('end', function(){});
 objectstream.Parser.on('finish', function(){});
 
-objectstream.Stringifer.end(Object.assign(object));
+objectstream.Stringifer.write();
+objectstream.Stringifer.write(Object.assign(object));
+objectstream.Stringifer.write();
+objectstream.Stringifer.end();
 
-objectstream.Parser.end(string);
+objectstream.Parser.write(start);
+objectstream.Parser.write();
+objectstream.Parser.write(string);
+objectstream.Parser.write();
+objectstream.Parser.end(end);

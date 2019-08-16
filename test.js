@@ -12,26 +12,32 @@ let objectstream = {
 };
 
 objectstream.Stringifer.on('data', function(data){
-	console.log(data);
+	if(data)
+		console.log(data);
 });
 objectstream.Stringifer.on('error', function(data){
 	console.error(data.message);
 });
-objectstream.Stringifer.on('end', function(){
+objectstream.Stringifer.on('end', function(data){
+	if(data)
+		console.error(data);
 	console.error('END: Stringifer!');
 });
 objectstream.Stringifer.on('finish', function(){
 	console.error('FIN: Stringifer!');
 });
 objectstream.Parser.on('data', function(data){
-	console.log(data);
+	if(data)
+		console.log(data);
 });
 objectstream.Parser.on('error', function(data){
 	data.forEach(function(err){
 		console.error(err.message);
 	});
 });
-objectstream.Parser.on('end', function(){
+objectstream.Parser.on('end', function(data){
+	if(data)
+		console.error(data);
 	console.error('END: Parser!');
 });
 objectstream.Parser.on('finish', function(){
@@ -53,7 +59,8 @@ objectstream.Parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g
 																									Unexpected token ] in JSON at position 5 
 																									Unexpected token u in JSON at position 1 */
 objectstream.Parser.write('{"b":"');															//	go to next line
-objectstream.Parser.end('тестовая строка\b\t\n\f\r\0\v"}');										//	{ b: 'тестовая строка\b\t\n\f\r\u0000\u000b' }
+objectstream.Parser.write('тестовая строка\b\t\n\f\r\0\v"}');									//	{ b: 'тестовая строка\b\t\n\f\r\u0000\u000b' }
+objectstream.Parser.end('{"test":');															//	Unexpected end of JSON input
 
 /* Output:
 	Incoming data type is number, require data type is Object!
@@ -69,7 +76,8 @@ objectstream.Parser.end('тестовая строка\b\t\n\f\r\0\v"}');							
 	Unexpected token u in JSON at position 1
 	{ b: 'тестовая строка\b\t\n\f\r\u0000\u000b' }
 	FIN: Stringifer!
-	END: Stringifer!
+	Unexpected end of JSON input
 	FIN: Parser!
+	END: Stringifer!
 	END: Parser!
 */
