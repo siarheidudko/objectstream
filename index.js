@@ -61,6 +61,7 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 		highWaterMark: 64*1024,
 		objectMode: true
 	});
+	self.Transform.setEncoding('utf8');
 	return self.Transform;
 }
 
@@ -77,7 +78,7 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 		self.LeftBrace = 0;
 		self.RightBrace = 0;
 		self.OpenQuotes = false;
-		self.StringDecoder.end();
+		//self.StringDecoder.end();
 		return;
 	}
 	self.clear();
@@ -157,6 +158,7 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 			callback();
 		},
 		final(callback = function(){}){
+			self.StringDecoder.end();
 			if(self.StringBuffer === ''){
 				callback();
 			} else {

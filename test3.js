@@ -53,7 +53,7 @@ objectstream.Parser2.on('error', function(data){ console.log(data); });
 
 objectstream.Parser.pipe(objectstream.Stringifer2).pipe(objectstream.Parser2).pipe(objectstream.Stringifer);
 
-for(let i = 0; i < 10; i++){
+for(let i = 0; i < 10000; i++){
 	for(let j = 0; j < Buffer.byteLength(buffer); j++){
 		objectstream.Parser.write(buffer.slice(j, j+1));
 	}
