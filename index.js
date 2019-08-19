@@ -30,24 +30,24 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 							}
 							self.Transform.push(_string);
 							self.bytesWrite += Buffer.byteLength(_string, self.encoding);
-							return callback();
+							return process.nextTick(callback);
 						} catch(err){
-							return callback(err);
+							return process.nextTick(callback, err);
 						}
 					} else {
-						return callback(new Error('Incoming data type is Array, require data type is Object!'));
+						return process.nextTick(callback, new Error('Incoming data type is Array, require data type is Object!'));
 					}
 					break;
 				case 'undefined':
-					return callback();
+					return process.nextTick(callback);
 					break;
 				default:
-					return callback(new Error('Incoming data type is '+typeof(object)+', require data type is Object!'));
+					return process.nextTick(callback, new Error('Incoming data type is '+typeof(object)+', require data type is Object!'));
 					break;
 			}
 		},
 		flush(callback = function(){}){
-			callback();
+			process.nextTick(callback);
 		},
 		final(callback = function(){}){
 			if(self.bytesWrite === 0){
@@ -56,7 +56,7 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 				self.Transform.push(_end);
 			}
 			self.bytesWrite += Buffer.byteLength(_end, self.encoding);
-			callback();
+			process.nextTick(callback);
 		},
 		highWaterMark: 64*1024,
 		objectMode: true
@@ -88,11 +88,11 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 				string = self.StringDecoder.write(string);
 			}
 			if(string === ''){
-				return callback();
+				return process.nextTick(callback);
 			}else if(typeof(string) === 'undefined'){
-				return callback();
+				return process.nextTick(callback);
 			} else if(typeof(string) !== 'string'){
-				return callback(new Error('Incoming data type is '+typeof(string)+', require data type is String or Buffer!'));
+				return process.nextTick(callback, [new Error('Incoming data type is '+typeof(string)+', require data type is String or Buffer!')]);
 			}
 			let charArr = new Array();
 			let error = new Array();
@@ -146,27 +146,27 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 				}
 				if(s === (charArr.length -1)){
 					if(error.length > 0){
-						return callback(error);
+						return process.nextTick(callback, error);
 					} else {
-						return callback();
+						return process.nextTick(callback);
 					}
 				}
 			};
 		},
 		flush(callback = function(){}){
 			self.clear();
-			callback();
+			process.nextTick(callback);
 		},
 		final(callback = function(){}){
 			self.StringDecoder.end();
 			if(self.StringBuffer === ''){
-				callback();
+				process.nextTick(callback);
 			} else {
 				try{
 					let c = JSON.parse(self.StringBuffer);
-					callback([new Error('Raw object detected!')]);
+					process.nextTick(callback, [new Error('Raw object detected!')]);
 				} catch(err){
-					callback([err]);
+					process.nextTick(callback, [err]);
 				}
 			}
 		},
