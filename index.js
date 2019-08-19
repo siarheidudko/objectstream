@@ -30,24 +30,24 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 							}
 							self.Transform.push(_string);
 							self.bytesWrite += Buffer.byteLength(_string, self.encoding);
-							return process.nextTick(callback);
+							callback();
 						} catch(err){
-							return process.nextTick(callback, err);
+							callback(err);
 						}
 					} else {
-						return process.nextTick(callback, new Error('Incoming data type is Array, require data type is Object!'));
+						callback(new Error('Incoming data type is Array, require data type is Object!'));
 					}
 					break;
 				case 'undefined':
-					return process.nextTick(callback);
+					callback();
 					break;
 				default:
-					return process.nextTick(callback, new Error('Incoming data type is '+typeof(object)+', require data type is Object!'));
+					callback(new Error('Incoming data type is '+typeof(object)+', require data type is Object!'));
 					break;
 			}
 		},
 		flush(callback = function(){}){
-			process.nextTick(callback);
+			callback();
 		},
 		final(callback = function(){}){
 			if(self.bytesWrite === 0){
@@ -56,7 +56,7 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 				self.Transform.push(_end);
 			}
 			self.bytesWrite += Buffer.byteLength(_end, self.encoding);
-			process.nextTick(callback);
+			callback();
 		},
 		highWaterMark: 64*1024,
 		objectMode: true
@@ -88,85 +88,84 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 				string = self.StringDecoder.write(string);
 			}
 			if(string === ''){
-				return process.nextTick(callback);
+				callback();
 			}else if(typeof(string) === 'undefined'){
-				return process.nextTick(callback);
+				callback();
 			} else if(typeof(string) !== 'string'){
-				return process.nextTick(callback, [new Error('Incoming data type is '+typeof(string)+', require data type is String or Buffer!')]);
-			}
-			let charArr = new Array();
-			let error = new Array();
-			charArr = string.split('');
-			self.bytesRead += Buffer.byteLength(string, self.encoding);
-			for(let s = 0; s < charArr.length; s++){
-				if(charArr[s] !== null){
-					switch(charArr[s]){
-						case '{':
-							self.LeftBrace++;
-							self.StringBuffer = self.StringBuffer + charArr[s];
-							break;
-						case '}':
-							self.RightBrace++;
-							self.StringBuffer = self.StringBuffer + charArr[s];
-							break;
-						case '\b':
-						case '\t':
-						case '\n':
-						case '\f':
-						case '\r':
-						case '\0':
-						case '\v':
-							if(self.OpenQuotes && (self.LeftBrace !== 0)){ 
-								self.StringBuffer = self.StringBuffer + '\\u'+('0000' + charArr[s].charCodeAt(0).toString(16)).slice(-4);
-							}
-							break;
-						case '"':
-							if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
-								self.OpenQuotes = true;
-							}
-						default:
-							if(self.LeftBrace !== 0) {
-								self.StringBuffer = self.StringBuffer + charArr[s]; 
-							}
-							break;
-					}
-					if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
-						try{
-							let _object = JSON.parse(self.StringBuffer);
-							self.Transform.push(_object);
-						} catch(err){
-							error.push(err);
-						} finally {
-							self.clear();
+				callback([new Error('Incoming data type is '+typeof(string)+', require data type is String or Buffer!')]);
+			} else {
+				let charArr = new Array();
+				let error = new Array();
+				charArr = string.split('');
+				self.bytesRead += Buffer.byteLength(string, self.encoding);
+				for(let s = 0; s < charArr.length; s++){
+					if(charArr[s] !== null){
+						switch(charArr[s]){
+							case '{':
+								self.LeftBrace++;
+								self.StringBuffer = self.StringBuffer + charArr[s];
+								break;
+							case '}':
+								self.RightBrace++;
+								self.StringBuffer = self.StringBuffer + charArr[s];
+								break;
+							case '\b':
+							case '\t':
+							case '\n':
+							case '\f':
+							case '\r':
+							case '\0':
+							case '\v':
+								if(self.OpenQuotes && (self.LeftBrace !== 0)){ 
+									self.StringBuffer = self.StringBuffer + '\\u'+('0000' + charArr[s].charCodeAt(0).toString(16)).slice(-4);
+								}
+								break;
+							case '"':
+								if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
+									self.OpenQuotes = true;
+								}
+							default:
+								if(self.LeftBrace !== 0) {
+									self.StringBuffer = self.StringBuffer + charArr[s]; 
+								}
+								break;
 						}
-					} else if(self.LeftBrace < self.RightBrace){
-						self.clear();
-						error.push(new Error('Parsing error, clear buffer!'));
+						if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
+							try{
+								let _object = JSON.parse(self.StringBuffer);
+								self.Transform.push(_object);
+							} catch(err){
+								error.push(err);
+							} finally {
+								self.clear();
+							}
+						} else if(self.LeftBrace < self.RightBrace){
+							self.clear();
+							error.push(new Error('Parsing error, clear buffer!'));
+						}
 					}
+				};
+				if(error.length > 0){
+					callback(error);
+				} else {
+					callback();
 				}
-				if(s === (charArr.length -1)){
-					if(error.length > 0){
-						return process.nextTick(callback, error);
-					} else {
-						return process.nextTick(callback);
-					}
-				}
-			};
+			}
 		},
 		flush(callback = function(){}){
 			self.clear();
-			process.nextTick(callback);
+			callback();
 		},
 		final(callback = function(){}){
 			self.StringDecoder.end();
 			if(self.StringBuffer === ''){
-				process.nextTick(callback);
+				callback();
 			} else {
 				try{
 					let c = JSON.parse(self.StringBuffer);
-					process.nextTick(callback, [new Error('Raw object detected!')]);
+					callback([new Error('Raw object detected!')]);
 				} catch(err){
-					process.nextTick(callback, [err]);
+					callback([err]);
 				}
 			}
 		},
