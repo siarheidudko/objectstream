@@ -22,51 +22,8 @@ Creates a stream to convert json from string or convert json to drain. The strea
     
 ```
 	let ObjectStream = require('@sergdudko/objectstream');
-	let objectStream = new ObjectStream();
-	
-	objectStream.Stringifer.on('data', function(data){
-		..//data event return string (based on JSON.stringify method)
-	});
-	objectStream.Stringifer.on('error', function(err){
-		..//error event return err (instanceof Error)
-	});
-	objectStream.Stringifer.on('end', function(){
-		..//end event
-	});
-	objectStream.Stringifer.on('finish', function(){
-		..//finish event
-	});
-	
-	objectStream.Parser.on('data', function(data){
-		..//data event return object (based on JSON.parse method)
-	});
-	objectStream.Parser.on('error', function(errors){
-		..//error event return Array of error (instanceof Error)
-		errors.forEach(function(err){
-			..//err (instanceof Error)
-		});
-	});
-	objectStream.Parser.on('end', function(){
-		..//end event
-	});
-	objectStream.Parser.on('finish', function(){
-		..//finish event
-	});
-	
-	objectstream.Stringifer.write(1);		//will cause an error event
-	objectstream.Stringifer.write({w:1});	//will cause an data event {"w":1}
-	objectstream.Stringifer.end({w:1});		//will cause an data event {"w":1}, end event, finish event
-
-	objectstream.Parser.write('@');				//will cause an error event
-	objectstream.Parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g":1}{}{u:0}');		//will cause an data event {w:1} {b:2, a: false} {f:3} {g:1} {}, error event 
-	objectstream.Parser.end('{"w":1}');			//will cause an data event {"w":1}, end event, finish event
-```
-    
-## Alternative  
-```
-	let objectStream = require('@sergdudko/objectstream')();
-	let Stringifer = new objectStream.Stringifer();
-	let Parser = new objectStream.Parser();	
+	let Stringifer = new ObjectStream.Stringifer();
+	let Parser = new ObjectStream.Parser();
 	
 	Stringifer.on('data', function(data){
 		..//data event return string (based on JSON.stringify method)
@@ -108,7 +65,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 
 ## TEST  
 ```
-	let ObjectStream = require('@sergdudko/objectstream')();
+	let ObjectStream = require('@sergdudko/objectstream');
 
     const start = '[',
           sep = ',',

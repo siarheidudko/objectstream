@@ -7,8 +7,8 @@
 let ObjectStream = require('./index.js');
 
 let objectstream = {
-	Stringifer: new (ObjectStream().Stringifer)(),
-	Parser: new (ObjectStream().Parser)()
+	Stringifer: new ObjectStream.Stringifer(),
+	Parser: new ObjectStream.Parser()
 };
 
 objectstream.Stringifer.on('data', function(data){

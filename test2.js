@@ -11,8 +11,8 @@ const start = '[',
 	  end = ']';
 
 let objectstream = {
-	Stringifer: new (ObjectStream().Stringifer)(start, sep, end),
-	Parser: new (ObjectStream().Parser)(start, sep, end)
+	Stringifer: new ObjectStream.Stringifer(start, sep, end),
+	Parser: new ObjectStream.Parser(start, sep, end)
 };
 
 const object = {

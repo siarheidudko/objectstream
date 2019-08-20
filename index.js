@@ -61,7 +61,6 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 		highWaterMark: 64*1024,
 		objectMode: true
 	});
-	self.Transform.setEncoding('utf8');
 	return self.Transform;
 }
 
@@ -78,26 +77,28 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 		self.LeftBrace = 0;
 		self.RightBrace = 0;
 		self.OpenQuotes = false;
-		//self.StringDecoder.end();
 		return;
 	}
 	self.clear();
 	self.Transform = new STREAM.Transform({
 		transform(string, encoding = self.encoding, callback = function(){}) {
+			let _string;
 			if(string instanceof Buffer){ 
-				string = self.StringDecoder.write(string);
+				_string = self.StringDecoder.write(string);
+			} else {
+				_string = string;
 			}
-			if(string === ''){
+			if(_string === ''){
 				callback();
-			}else if(typeof(string) === 'undefined'){
+			}else if(typeof(_string) === 'undefined'){
 				callback();
-			} else if(typeof(string) !== 'string'){
-				callback([new Error('Incoming data type is '+typeof(string)+', require data type is String or Buffer!')]);
+			} else if(typeof(_string) !== 'string'){
+				callback([new Error('Incoming data type is '+typeof(_string)+', require data type is String!')]);
 			} else {
 				let charArr = new Array();
 				let error = new Array();
-				charArr = string.split('');
-				self.bytesRead += Buffer.byteLength(string, self.encoding);
+				charArr = _string.split('');
+				self.bytesRead += Buffer.byteLength(_string, self.encoding);
 				for(let s = 0; s < charArr.length; s++){
 					if(charArr[s] !== null){
 						switch(charArr[s]){
@@ -175,18 +176,5 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 	return self.Transform;
 }
 
-let ObjectStream = function(){
-	let self = this;
-	if(this){
-		self.Stringifer = new Stringifer();
-		self.Parser = new Parser();
-		return self;
-	} else {
-		return {
-			Stringifer: Stringifer,
-			Parser: Parser
-		};
-	}
-}
-
-module.exports = ObjectStream;
+module.exports.Stringifer = Stringifer;
+module.exports.Parser = Parser;
