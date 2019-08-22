@@ -122,8 +122,10 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 								}
 								break;
 							case '"':
-								if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
-									self.OpenQuotes = true;
+								if(self.StringBuffer[self.StringBuffer.length-1] !== '\\'){
+									if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
+										self.OpenQuotes = true;
+									}
 								}
 							default:
 								if(self.LeftBrace !== 0) {
