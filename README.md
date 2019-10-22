@@ -14,7 +14,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ## Install  
   
 ```
-	npm i objectstream --save
+	npm i @sergdudko/objectstream --save
 ```
   
 
