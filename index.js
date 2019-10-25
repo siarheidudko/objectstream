@@ -73,7 +73,7 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 	self.encoding = 'utf8';
 	self.StringDecoder = new StringDecoder(self.encoding);
 	self.clear = function(){
-		self.StringBuffer = '';
+		self.StringBufferArray = new Array();
 		self.LeftBrace = 0;
 		self.RightBrace = 0;
 		self.OpenQuotes = false;
@@ -95,57 +95,54 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 			} else if(typeof(_string) !== 'string'){
 				callback([new Error('Incoming data type is '+typeof(_string)+', require data type is String!')]);
 			} else {
-				let charArr = new Array();
 				let error = new Array();
-				charArr = _string.split('');
-				self.bytesRead += Buffer.byteLength(_string, self.encoding);
-				for(let s = 0; s < charArr.length; s++){
-					if(charArr[s] !== null){
-						switch(charArr[s]){
-							case '{':
-								self.LeftBrace++;
-								self.StringBuffer = self.StringBuffer + charArr[s];
-								break;
-							case '}':
-								self.RightBrace++;
-								self.StringBuffer = self.StringBuffer + charArr[s];
-								break;
-							case '\b':
-							case '\t':
-							case '\n':
-							case '\f':
-							case '\r':
-							case '\0':
-							case '\v':
-								if(self.OpenQuotes && (self.LeftBrace !== 0)){ 
-									self.StringBuffer = self.StringBuffer + '\\u'+('0000' + charArr[s].charCodeAt(0).toString(16)).slice(-4);
-								}
-								break;
-							case '"':
-								if(self.StringBuffer[self.StringBuffer.length-1] !== '\\'){
-									if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
-										self.OpenQuotes = true;
-									}
-								}
-							default:
-								if(self.LeftBrace !== 0) {
-									self.StringBuffer = self.StringBuffer + charArr[s]; 
-								}
-								break;
-						}
-						if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
-							try{
-								let _object = JSON.parse(self.StringBuffer);
-								self.Transform.push(_object);
-							} catch(err){
-								error.push(err);
-							} finally {
-								self.clear();
+				let _buffer = Buffer.from(_string, self.encoding);
+				self.bytesRead += _buffer.length;
+				for(let s = 0; s < _buffer.length; s++){
+					switch(_buffer[s]){
+						case 0x7b:	// symbol {
+							self.LeftBrace++;
+							self.StringBufferArray.push(_buffer.slice(s,s+1)); 
+							break;
+						case 0x7d:	// symbol }
+							self.RightBrace++;
+							self.StringBufferArray.push(_buffer.slice(s,s+1)); 
+							break;
+						case 0x08:	// symbol \b
+						case 0x09:	// symbol \t
+						case 0x0a:	// symbol \n
+						case 0x0c:	// symbol \f
+						case 0x0d:	// symbol \r
+						case 0x00:	// symbol \0
+						case 0x0b:	// symbol \v
+							if(self.OpenQuotes && (self.LeftBrace !== 0)){ 
+								self.StringBufferArray.push(Buffer.from('\\u'+('0000' + _buffer[s].toString(16)).slice(-4), self.encoding));
 							}
-						} else if(self.LeftBrace < self.RightBrace){
+							break;
+						case 0x22:	// symbol "
+							if(self.StringBufferArray[self.StringBufferArray.length-1] !== 0x5c){
+								if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
+									self.OpenQuotes = true;
+								}
+							}
+						default:
+							if(self.LeftBrace !== 0) {
+								self.StringBufferArray.push(_buffer.slice(s,s+1)); 
+							}
+							break;
+					}
+					if((self.LeftBrace !== 0) && (self.LeftBrace === self.RightBrace)){
+						try{
+							let _object = JSON.parse(Buffer.concat(self.StringBufferArray).toString(self.encoding));
+							self.Transform.push(_object);
+						} catch(err){
+							error.push(err);
+						} finally {
 							self.clear();
-							error.push(new Error('Parsing error, clear buffer!'));
 						}
+					} else if(self.LeftBrace < self.RightBrace){
+						self.clear();
+						error.push(new Error('Parsing error, clear buffer!'));
 					}
 				};
 				if(error.length > 0){
@@ -161,11 +158,11 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 		},
 		final(callback = function(){}){
 			self.StringDecoder.end();
-			if(self.StringBuffer === ''){
+			if(self.StringBufferArray.length === 0){
 				callback();
 			} else {
 				try{
-					let c = JSON.parse(self.StringBuffer);
+					let c = JSON.parse(Buffer.concat(self.StringBufferArray).toString(self.encoding));
 					callback([new Error('Raw object detected!')]);
 				} catch(err){
 					callback([err]);
