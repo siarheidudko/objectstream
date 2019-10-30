@@ -120,8 +120,8 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 							}
 							break;
 						case 0x22:	// symbol "
-							if(self.StringBufferArray[self.StringBufferArray.length-1] !== 0x5c){
-								if(self.OpenQuotes){ self.OpenQuotes = false; } else if (self.LeftBrace !== 0) {
+							if(_buffer[s-1] !== 0x5c){
+								if(self.OpenQuotes){ self.OpenQuotes = false;} else if (self.LeftBrace !== 0) {
 									self.OpenQuotes = true;
 								}
 							}
