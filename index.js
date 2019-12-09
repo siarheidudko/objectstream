@@ -143,6 +143,10 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 					} else if(self.LeftBrace < self.RightBrace){
 						self.clear();
 						error.push(new Error('Parsing error, clear buffer!'));
+					} else if(self.StringBufferArray.length > 65536){
+						let _nbuffer = Buffer.concat(self.StringBufferArray);
+						self.StringBufferArray = new Array();
+						self.StringBufferArray.push(_nbuffer);
 					}
 				};
 				if(error.length > 0){

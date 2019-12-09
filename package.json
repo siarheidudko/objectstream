@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.",
   "main": "index.js",
   "scripts": {
@@ -21,9 +21,5 @@
     "jsonparser",
     "jsonstringify"
   ],
-  "homepage": "https://github.com/siarheidudko/objectstream.git#readme",
-  "dependencies": {
-    "stream": "0.0.2",
-    "string_decoder": "^1.3.0"
-  }
+  "homepage": "https://github.com/siarheidudko/objectstream.git#readme"
 }
