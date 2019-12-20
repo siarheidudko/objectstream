@@ -24,7 +24,7 @@
     "jsonparser",
     "jsonstringify"
   ],
-  "homepage": "https://github.com/siarheidudko/out/module-sergdudko_objectstream.html",
+  "homepage": "https://siarheidudko.github.io/objectstream/module-sergdudko_objectstream.html",
   "devDependencies": {
     "eslint": "^6.7.2",
     "jsdoc": "^3.6.3",
