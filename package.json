@@ -1,10 +1,13 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "1.6.0",
-  "description": "Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.",
+  "version": "1.7.0",
+  "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "index.js",
   "scripts": {
-    "test": "node test2.js"
+    "test": "mocha",
+    "doc": "jsdoc index.js",
+    "cov": "nyc mocha",
+	"eslint": "eslint index.js"
   },
   "author": "Siarhei Dudko",
   "license": "MIT",
@@ -21,5 +24,13 @@
     "jsonparser",
     "jsonstringify"
   ],
-  "homepage": "https://github.com/siarheidudko/objectstream.git#readme"
+  "homepage": "https://github.com/siarheidudko/out/module-sergdudko_objectstream.html",
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "jsdoc": "^3.6.3",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1"
+  },
+  "dependencies": {}
 }

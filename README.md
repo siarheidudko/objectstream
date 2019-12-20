@@ -16,7 +16,10 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ```
 	npm i @sergdudko/objectstream --save
 ```
-  
+
+## Docs
+
+[See docs](https://github.com/siarheidudko/out/module-sergdudko_objectstream.html)
 
 ## Use
     
