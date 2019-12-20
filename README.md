@@ -62,14 +62,20 @@ Creates a stream to convert json from string or convert json to drain. The strea
 	stringifer.end({w:1});		//Data event: {"w":1}, End event, Finish event
 
 	parser.write('@');				//Error event: Error: Unexpected token @ in JSON at position 0
-	parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g":1}{}{u:0}');		//Data event: {w:1}, Data event: {b:2, a: false}, Data event: {f:3}, Data event: {g:1}, Data event: {}, Error event: 
-																																																		//Error: Unexpected token , in JSON at position 27
-																																																		//Error: Unexpected token   in JSON at position 28
-																																																		//Error: Unexpected token [ in JSON at position 29
-																																																		//Error: Unexpected token , in JSON at position 37
-																																																		//Error: Unexpected token   in JSON at position 38
-																																																		//SyntaxError: Unexpected token ] in JSON at position 5
-																																																		//SyntaxError: Unexpected token u in JSON at position 1
+	parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g":1}{}{u:0}');		
+	//Data event: {w:1}, 
+	//Data event: {b:2, a: false}, 
+	//Data event: {f:3}, 
+	//Data event: {g:1}, 
+	//Data event: {}, 
+	//Error event: 
+	//Error: Unexpected token , in JSON at position 27
+	//Error: Unexpected token   in JSON at position 28
+	//Error: Unexpected token [ in JSON at position 29
+	//Error: Unexpected token , in JSON at position 37
+	//Error: Unexpected token   in JSON at position 38
+	//SyntaxError: Unexpected token ] in JSON at position 5
+	//SyntaxError: Unexpected token u in JSON at position 1
 	parser.end('{"w":1}');			//Data event: {"w":1}, End event, Finish event
 ```
 
