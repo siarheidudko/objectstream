@@ -24,46 +24,53 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ## Use
     
 ```
-	let ObjectStream = require('@sergdudko/objectstream');
-	let Stringifer = new ObjectStream.Stringifer();
-	let Parser = new ObjectStream.Parser();
+	let ObjectStream = require('./index.js');
+	let stringifer = new ObjectStream.Stringifer();
+	let parser = new ObjectStream.Parser();
 	
-	Stringifer.on('data', function(data){
-		..//data event return string (based on JSON.stringify method)
+	stringifer.on('data', function(data){
+		//data event return string (based on JSON.stringify method)
 	});
-	Stringifer.on('error', function(err){
-		..//error event return err (instanceof Error)
+	stringifer.on('error', function(err){
+		//error event return err (instanceof Error)
 	});
-	Stringifer.on('end', function(){
-		..//end event
+	stringifer.on('end', function(data){
+		//end event
 	});
-	Stringifer.on('finish', function(){
-		..//finish event
+	stringifer.on('finish', function(){
+		//finish event
 	});
 	
-	Parser.on('data', function(data){
-		..//data event return object (based on JSON.parse method)
+	parser.on('data', function(data){
+		//data event return object (based on JSON.parse method)
 	});
-	Parser.on('error', function(errors){
-		..//error event return Array of error (instanceof Error)
+	parser.on('error', function(errors){
+		//error event return Array of error (instanceof Error)
 		errors.forEach(function(err){
-			..//err (instanceof Error)
+			//err (instanceof Error)
 		});
 	});
-	Parser.on('end', function(){
-		..//end event
+	parser.on('end', function(data){
+		//end event
 	});
-	Parser.on('finish', function(){
-		..//finish event
+	parser.on('finish', function(){
+		//finish event
 	});
 	
-	Stringifer.write(1);		//will cause an error event
-	Stringifer.write({w:1});	//will cause an data event {"w":1}
-	Stringifer.end({w:1});		//will cause an data event {"w":1}, end event, finish event
+	stringifer.write(1);		//Error event: Error: Incoming data type is number, require data type is pure Object!
+	stringifer.write({w:1});	//Data event: {"w":1}
+	stringifer.end({w:1});		//Data event: {"w":1}, End event, Finish event
 
-	Parser.write('@');				//will cause an error event
-	Parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g":1}{}{u:0}');		//will cause an data event {w:1} {b:2, a: false} {f:3} {g:1} {}, error event 
-	Parser.end('{"w":1}');			//will cause an data event {"w":1}, end event, finish event
+	parser.write('@');				//Error event: Error: Unexpected token @ in JSON at position 0
+	parser.write('{"w":1}\r{"b":2, "a": false}, [{"f":3}, {"c":]10 }{"g":1}{}{u:0}');		//Data event: {w:1}, Data event: {b:2, a: false}, Data event: {f:3}, Data event: {g:1}, Data event: {}, Error event: 
+																																																		//Error: Unexpected token , in JSON at position 27
+																																																		//Error: Unexpected token   in JSON at position 28
+																																																		//Error: Unexpected token [ in JSON at position 29
+																																																		//Error: Unexpected token , in JSON at position 37
+																																																		//Error: Unexpected token   in JSON at position 38
+																																																		//SyntaxError: Unexpected token ] in JSON at position 5
+																																																		//SyntaxError: Unexpected token u in JSON at position 1
+	parser.end('{"w":1}');			//Data event: {"w":1}, End event, Finish event
 ```
 
 ## TEST  
@@ -74,12 +81,10 @@ Creates a stream to convert json from string or convert json to drain. The strea
           sep = ',',
           end = ']';
           
-    let objectstream = {
-        Stringifer: new ObjectStream.Stringifer(start, sep, end),
-        Parser: new ObjectStream.Parser(start, sep, end),
-        Stringifer2: new ObjectStream.Stringifer(start, sep, end),
-        Parser2: new ObjectStream.Parser(start, sep, end)
-    };
+    let stringifer = new ObjectStream.Stringifer(start, sep, end),
+        parser = new ObjectStream.Parser(start, sep, end),
+        stringifer2 = new ObjectStream.Stringifer(start, sep, end),
+        parser2 = new ObjectStream.Parser(start, sep, end);
 
     const object = {
         number: 1234567890,
@@ -95,7 +100,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
     let nstring = start;
     let rstring = '';
 
-    objectstream.Stringifer.on('data', function(data){
+    stringifer.on('data', function(data){
         if(data)
             rstring += data;
     }).on('end', function(data){
@@ -111,15 +116,15 @@ Creates a stream to convert json from string or convert json to drain. The strea
     }).on('error', function(data){ console.error(data); });
 
 
-    objectstream.Parser.on('error', function(data){ console.log(data); });
-    objectstream.Stringifer2.on('error', function(data){ console.log(data); });
-    objectstream.Parser2.on('error', function(data){ console.log(data); });
+    parser.on('error', function(data){ console.log(data); });
+    stringifer2.on('error', function(data){ console.log(data); });
+    parser2.on('error', function(data){ console.log(data); });
 
-    objectstream.Parser.pipe(objectstream.Stringifer2).pipe(objectstream.Parser2).pipe(objectstream.Stringifer);
+    parser.pipe(stringifer2).pipe(parser2).pipe(stringifer);
 
     for(let i = 0; i < 10; i++){
         for(let j = 0; j < Buffer.byteLength(buffer); j++){
-            objectstream.Parser.write(buffer.slice(j, j+1));
+            parser.write(buffer.slice(j, j+1));
         }
         if(i === 0){
             nstring += string;
@@ -128,7 +133,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
         }
     }
     nstring += end;
-    objectstream.Parser.end();
+    parser.end();
 ```
   
 ## LICENSE  
