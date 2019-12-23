@@ -2,7 +2,7 @@
  * Module for stream conversion Json to String and String to Json
  * @module sergdudko/objectstream
  * @author Siarhei Dudko <slavianich@gmail.com>
- * @version 1.7.1
+ * @version 1.7.2
  */
  
 'use strict'
