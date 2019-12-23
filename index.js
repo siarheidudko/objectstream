@@ -2,7 +2,11 @@
  * Module for stream conversion Json to String and String to Json
  * @module sergdudko/objectstream
  * @author Siarhei Dudko <slavianich@gmail.com>
- * @version 1.7.2
+ * @copyright 2019
+ * @license MIT
+ * @version 1.7.3
+ * @requires stream
+ * @requires string_decoder
  */
  
 'use strict'
@@ -39,6 +43,7 @@ let validator = function(obj, it = true){
 /**
   * Сreates an instance of Stringifer (Json to String conversion stream)
   * 
+  * @class Stringifer
   * @param {string} _start - character at the beginning of the stream, is added
   * @param {string} _separator - separator of objects inside the stream, is added
   * @param {string} _end - character at the end of the stream, is added
@@ -103,6 +108,7 @@ let Stringifer = function(_start = '', _separator = '', _end = ''){
 /**
   * Сreates an instance of Parser (String to Json conversion stream)
   * 
+  * @class Parser
   * @param {string} _start - character at the beginning of the stream, is discarded
   * @param {string} _separator - separator of objects inside the stream, is discarded
   * @param {string} _end - character at the end of the stream, is discarded
