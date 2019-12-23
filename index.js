@@ -39,9 +39,9 @@ let validator = function(obj, it = true){
 /**
   * Сreates an instance of Stringifer (Json to String conversion stream)
   * 
-  * @param {string} _start - character at the beginning of the stream, is discarded
-  * @param {string} _separator - separator of objects inside the stream, is discarded
-  * @param {string} _end - character at the end of the stream, is discarded
+  * @param {string} _start - character at the beginning of the stream, is added
+  * @param {string} _separator - separator of objects inside the stream, is added
+  * @param {string} _end - character at the end of the stream, is added
   * @returns {Stream.Transform} 
   */
 let Stringifer = function(_start = '', _separator = '', _end = ''){
