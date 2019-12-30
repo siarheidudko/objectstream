@@ -19,7 +19,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 
 ## Docs
 
-[See docs](https://github.com/siarheidudko/out/module-sergdudko_objectstream.html)
+[See docs](https://siarheidudko.github.io/objectstream/index.html)
 
 ## Use
     
