@@ -4,7 +4,7 @@
  * @author Siarhei Dudko <slavianich@gmail.com>
  * @copyright 2019
  * @license MIT
- * @version 1.7.4
+ * @version 1.7.5
  * @requires stream
  * @requires string_decoder
  */
@@ -119,6 +119,9 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 	if((typeof(_separator) !== 'string') || (Buffer.byteLength(_separator) > 1) || (_separator.match(/["{}]/))){ throw new Error('Argument separator require one byte String!'); }
 	if((typeof(_end) !== 'string') || (Buffer.byteLength(_end) > 1) || (_end.match(/["{}]/))){ throw new Error('Argument end require one byte String!'); }
 	let self = this;
+	const _startToken = Buffer.from(_start)[0],
+		_separatorToken = Buffer.from(_separator)[0],
+		_endToken = Buffer.from(_end)[0];
 	self.bytesRead = 0;
 	self.encoding = 'utf8';
 	self.StringDecoder = new StringDecoder(self.encoding);
@@ -131,17 +134,15 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 	}
 	self.clear();
 	self.defaultHandler = function(_buffer, s, error){
+		if(self.StringBufferArray.length > 65536){
+			let _nbuffer = Buffer.concat(self.StringBufferArray);
+			self.StringBufferArray = new Array();
+			self.StringBufferArray.push(_nbuffer);
+		}
 		if(self.LeftBrace !== 0) {
 			self.StringBufferArray.push(_buffer.slice(s,s+1)); 
-		} else if(self.bytesRead === 0) {
-			if(_start !== _buffer.slice(s,s+1).toString(self.encoding))
-				error.push(new Error('Unexpected token '+_buffer.slice(s,s+1)+' in JSON at position '+s));
-		} else if(s === (_buffer.length-1)) {
-			if(_end !== _buffer.slice(s,s+1).toString(self.encoding))
-				error.push(new Error('Unexpected token '+_buffer.slice(s,s+1)+' in JSON at position '+s));
-		} else {
-			if(_separator !== _buffer.slice(s,s+1).toString(self.encoding))
-				error.push(new Error('Unexpected token '+_buffer.slice(s,s+1)+' in JSON at position '+s));
+		} else if((_startToken !== _buffer[s]) && (_endToken !== _buffer[s]) && (_separatorToken !== _buffer[s])){
+			error.push(new Error('Unexpected token '+_buffer.slice(s,s+1).toString(self.encoding)+' in JSON at position '+s));
 		}
 	}
 	self.transform = new Stream.Transform({
@@ -166,11 +167,11 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 					switch(_buffer[s]){
 						case 0x7b:	// symbol {
 							self.LeftBrace++;
-							self.StringBufferArray.push(_buffer.slice(s,s+1)); 
+							self.defaultHandler(_buffer, s, error);
 							break;
 						case 0x7d:	// symbol }
 							self.RightBrace++;
-							self.StringBufferArray.push(_buffer.slice(s,s+1)); 
+							self.defaultHandler(_buffer, s, error);
 							break;
 						case 0x08:	// symbol \b
 						case 0x09:	// symbol \t
@@ -201,30 +202,27 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 						try{
 							let _object = JSON.parse(Buffer.concat(self.StringBufferArray).toString(self.encoding));
 							if(validator(_object, false)){
+								self.clear();
 								self.transform.push(_object);
 							} else {
+								self.clear();
 								error.push(new Error('Validation failed, incoming data type is not pure Object!'));
 							}
 						} catch(err){
-							error.push(err);
-						} finally {
 							self.clear();
+							error.push(err);
 						}
 					} else if(self.LeftBrace < self.RightBrace){
 						self.clear();
 						error.push(new Error('Parsing error, clear buffer!'));
-					} else if(self.StringBufferArray.length > 65536){
-						let _nbuffer = Buffer.concat(self.StringBufferArray);
-						self.StringBufferArray = new Array();
-						self.StringBufferArray.push(_nbuffer);
 					}
 				}
-				self.bytesRead += _buffer.length;
 				if(error.length > 0){
 					callback(error);
 				} else {
 					callback();
 				}
+				self.bytesRead += _buffer.byteLength;
 			}
 		},
 		flush(callback = function(){}){
