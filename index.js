@@ -4,7 +4,7 @@
  * @author Siarhei Dudko <slavianich@gmail.com>
  * @copyright 2019
  * @license MIT
- * @version 1.7.5
+ * @version 1.7.6
  * @requires stream
  * @requires string_decoder
  */
@@ -121,7 +121,11 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 	let self = this;
 	const _startToken = Buffer.from(_start)[0],
 		_separatorToken = Buffer.from(_separator)[0],
-		_endToken = Buffer.from(_end)[0];
+		_endToken = Buffer.from(_end)[0],
+		_spaceToken = Buffer.from(' ')[0],
+		_rToken = Buffer.from('\r')[0],
+		_nToken = Buffer.from('\n')[0],
+		_tToken = Buffer.from('\t')[0];
 	self.bytesRead = 0;
 	self.encoding = 'utf8';
 	self.StringDecoder = new StringDecoder(self.encoding);
@@ -141,8 +145,8 @@ let Parser = function(_start = '', _separator = '', _end = ''){
 		}
 		if(self.LeftBrace !== 0) {
 			self.StringBufferArray.push(_buffer.slice(s,s+1)); 
-		} else if((_startToken !== _buffer[s]) && (_endToken !== _buffer[s]) && (_separatorToken !== _buffer[s])){
-			error.push(new Error('Unexpected token '+_buffer.slice(s,s+1).toString(self.encoding)+' in JSON at position '+s));
+		} else if((_startToken !== _buffer[s]) && (_endToken !== _buffer[s]) && (_separatorToken !== _buffer[s]) && (_spaceToken !== _buffer[s]) && (_rToken !== _buffer[s]) && (_nToken !== _buffer[s]) && (_tToken !== _buffer[s])){
+			error.push(new Error('Unexpected token '+_buffer.slice(s,s+1).toString(self.encoding)+' in JSON at position '+(self.bytesRead+s)));
 		}
 	}
 	self.transform = new Stream.Transform({
