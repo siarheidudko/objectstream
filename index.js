@@ -23,6 +23,8 @@ let validator = function(obj, it = true){
 		case 'string':
 			return true;
 		case 'object':
+			if(obj === null)
+				return true;
 			if((obj.__proto__ === {}.__proto__) || (it && (obj.__proto__ === [].__proto__))){
 				let keys = Object.keys(obj);
 				for(let i = 0; i < keys.length; i++){

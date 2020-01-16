@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "index.js",
   "scripts": {

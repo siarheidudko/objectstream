@@ -73,11 +73,11 @@ describe('Parser: Valid data type test_1:', function() {
 
 describe('Parser: Valid data type test_2:', function() {
 	let parser = new ObjectStream.Parser();
-	it('data === "{"w":1,"c":{"k":true,"l":"t"}}"', function(done){
+	it('data === "{"w":1,"c":{"k":true,"l":"t","d":null}}"', function(done){
 		parser.once('data', function(data){
-			mycompare(Lodash.isEqual(data, {"w":1,"c":{"k":true,"l":"t"}}), done);
+			mycompare(Lodash.isEqual(data, {"w":1,"c":{"k":true,"l":"t","d":null}}), done);
 		});
-		parser.write('{"w":1,"c":{"k":true,"l":"t"}}');
+		parser.write('{"w":1,"c":{"k":true,"l":"t","d":null}}');
 	});
 });
 
