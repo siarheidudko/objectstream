@@ -80,7 +80,7 @@ describe('Stringifer: Valid data type test_1:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => {
-				if(data === '{"w":"fdsfds"}')
+				if(data.toString() === '{"w":"fdsfds"}')
 					res()
 				else
 					rej("Not Equal")
@@ -94,7 +94,7 @@ describe('Stringifer: Valid data type test_1:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => {
-				if(data === '{"w":1}')
+				if(data.toString() === '{"w":1}')
 					res()
 				else
 					rej("Not Equal")
@@ -108,7 +108,7 @@ describe('Stringifer: Valid data type test_1:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => {
-				if(data === '{"w":1,"c":true}')
+				if(data.toString() === '{"w":1,"c":true}')
 					res()
 				else
 					rej("Not Equal")
@@ -122,7 +122,7 @@ describe('Stringifer: Valid data type test_1:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => {
-				if(data === '{"w":1,"c":{"k":true,"l":"t","m":[1,2,3]}}')
+				if(data.toString() === '{"w":1,"c":{"k":true,"l":"t","m":[1,2,3]}}')
 					res()
 				else
 					rej("Not Equal")
@@ -139,7 +139,7 @@ describe('Stringifer: Valid data type test_1:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => { 
-				if(data === ('{"number":1234567890,"string_en":"abcdefghijklmnopqrstuvwxyz"' +
+				if(data.toString() === ('{"number":1234567890,"string_en":"abcdefghijklmnopqrstuvwxyz"' +
 					',"string_ru":"абвгдеёжзийклмнопртуфхцчшщъыьэюя","string_ascii":"\\b\\t\\n' +
 					'\\f\\r\\u0000\\u000b","bool":true,"array":["a",1,true],"object":{"a":"a","b":1,"c":true}}'))
 					res()

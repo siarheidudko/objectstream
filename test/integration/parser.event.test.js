@@ -87,4 +87,20 @@ describe('Parser Events:', function() {
 		parser.end()
 		await Promise.race([ actionError, actionEnd ])
 	})
+	it('parser.on("end", () => {}), write null', async () => {
+		const parser = new ObjectStream.Parser()
+		parser.on('data', () => {})
+		const actionError = new Promise((res, rej) => {
+			parser.once('error', (e) => { console.log(e)
+				rej("action error")
+			})
+		})
+		const actionEnd = new Promise((res, rej) => {
+			parser.once('end', () => {
+				res("action end")
+			})
+		})
+		parser.push(null)
+		await Promise.race([ actionError, actionEnd ])
+	})
 })

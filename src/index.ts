@@ -82,10 +82,11 @@ class Stringifer extends Transform {
 		) 
 			throw new Error("Argument end require one byte String!")
 		this.__separators = {
-			start: start?start:"",
-			middle: middle?middle:"",
-			end: end?end:""
+			start: Buffer.from(start?start:"", "utf8"),
+			middle: Buffer.from(middle?middle:"", "utf8"),
+			end: Buffer.from(end?end:"", "utf8")
 		}
+		this.__isString = false
 	}
 	/**
 	 * separators
@@ -93,10 +94,16 @@ class Stringifer extends Transform {
 	 * @private
 	 */
 	private __separators: {
-		start: string,
-		middle: string,
-		end: string
+		start: Buffer,
+		middle: Buffer,
+		end: Buffer
 	}
+	/**
+	 * pass string data to the stream
+	 * 
+	 * @private
+	 */
+	private __isString: boolean
 	/**
 	 * stream byte counter
 	 * 
@@ -128,7 +135,6 @@ class Stringifer extends Transform {
 			})
 			return
 		}
-		this.__encoding = encoding
 		switch(typeof(object)){
 			case "object":
 				try{
@@ -136,14 +142,15 @@ class Stringifer extends Transform {
 						callback(new Error("Validation failed, incoming data type is not pure Object!"))
 						return
 					}
-					let _string: string = JSON.stringify(object)
+					let _buffer: Buffer = Buffer.from(JSON.stringify(object), "utf8")
 					if(this.__bytesWrite === 0){
-						_string = this.__separators.start+_string
+						_buffer = Buffer.concat([this.__separators.start, _buffer])
 					} else {
-						_string = this.__separators.middle+_string
+						_buffer = Buffer.concat([this.__separators.middle, _buffer])
 					}
-					this.push(_string)
-					this.__bytesWrite += Buffer.byteLength(_string, this.__encoding)
+					if(this.__isString) this.push(_buffer.toString(this.__encoding))
+						else this.push(_buffer, this.__encoding)
+					this.__bytesWrite += Buffer.byteLength(_buffer)
 					callback()
 					return
 				} catch (err){
@@ -175,11 +182,14 @@ class Stringifer extends Transform {
 	 */
 	public _final(callback = () => { return }){
 		if(this.__bytesWrite === 0){
-			this.push(this.__separators.start+this.__separators.end)
+			const _buffer: Buffer = Buffer.concat([this.__separators.start, this.__separators.end])
+			if(this.__isString) this.push(_buffer.toString(this.__encoding))
+				else this.push(_buffer, this.__encoding)
 		} else {
-			this.push(this.__separators.end)
+			if(this.__isString) this.push(this.__separators.end.toString(this.__encoding))
+				else this.push(this.__separators.end, this.__encoding)
 		}
-		this.__bytesWrite += Buffer.byteLength(this.__separators.end, this.__encoding)
+		this.__bytesWrite += Buffer.byteLength(this.__separators.end)
 		callback()
 	}
 	/**
@@ -187,6 +197,7 @@ class Stringifer extends Transform {
 	 */
 	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
+		this.setDefaultEncoding(this.__encoding)
 		return this
 	}
 }
@@ -227,9 +238,9 @@ class Parser extends Transform {
 		) 
 			throw new Error("Argument end require one byte String!")
 		this.__separators = {
-			start: Buffer.from(start?start:"")[0],
-			middle: Buffer.from(middle?middle:"")[0],
-			end: Buffer.from(end?end:"")[0]
+			start: Buffer.from(start?start:"", "utf8")[0],
+			middle: Buffer.from(middle?middle:"", "utf8")[0],
+			end: Buffer.from(end?end:"", "utf8")[0]
 		}
 		this.__clear()
 	}
@@ -266,7 +277,7 @@ class Parser extends Transform {
 	 * 
 	 * @private
 	 */
-	private __buffer: Buffer[] = []
+	private __buffers: Buffer[] = []
 	/**
 	 * left brace counter
 	 * 
@@ -291,7 +302,7 @@ class Parser extends Transform {
 	 * @private
 	 */
 	private __clear = () => {
-		this.__buffer = []
+		this.__buffers = []
 		this.__leftBrace = 0
 		this.__rightBrace = 0
 		this.__openQuotes = false
@@ -300,13 +311,13 @@ class Parser extends Transform {
 	 * basic stream handler
 	 */
 	private __handler = (buffer: Buffer, s: number, errors: Error[]) => {
-		if(this.__buffer.length > 65536){
-			const _nbuffer = Buffer.concat(this.__buffer)
-			this.__buffer = []
-			this.__buffer.push(_nbuffer)
+		if(this.__buffers.length > 65536){
+			const _nbuffer = Buffer.concat(this.__buffers)
+			this.__buffers = []
+			this.__buffers.push(_nbuffer)
 		}
 		if(this.__leftBrace !== 0) {
-			this.__buffer.push(buffer.slice(s,s+1))
+			this.__buffers.push(buffer.slice(s,s+1))
 		} else if(
 			(this.__separators.start !== buffer[s]) && 
 			(this.__separators.end !== buffer[s]) && 
@@ -330,7 +341,6 @@ class Parser extends Transform {
 	 * @param callback - callback function
 	 */
 	public _transform(string: string|Buffer|null|undefined, encoding = this.__encoding, callback: Function = () => { return }) {
-		this.__encoding = encoding
 		if(typeof(string) === "undefined"){
 			callback()
 			return
@@ -342,7 +352,7 @@ class Parser extends Transform {
 			return
 		}
 		const _buffer: Buffer = (typeof(string) === "string")?
-			Buffer.from(string, this.__encoding) : string
+			Buffer.from(string, encoding) : string
 		if(!(_buffer instanceof Buffer)){
 			callback([
 				new Error("Incoming data type is " +
@@ -374,7 +384,7 @@ class Parser extends Transform {
 				case 0x00:
 				case 0x0b:
 					if(this.__openQuotes && (this.__leftBrace !== 0))
-						this.__buffer.push(
+						this.__buffers.push(
 							Buffer.from("\\u"+("0000" + _buffer[s].toString(16)).slice(-4), this.__encoding)
 						)
 					break
@@ -391,7 +401,7 @@ class Parser extends Transform {
 			}
 			if((this.__leftBrace !== 0) && (this.__leftBrace === this.__rightBrace)){
 				try{
-					const _object = JSON.parse(Buffer.concat(this.__buffer).toString(this.__encoding))
+					const _object = JSON.parse(Buffer.concat(this.__buffers).toString("utf8"))
 					if(validator(_object, false)){
 						this.__clear()
 						this.push(_object)
@@ -435,12 +445,12 @@ class Parser extends Transform {
 	 * @param callback - callback function
 	 */
 	public _final(callback: Function = () => { return }){
-		if(this.__buffer.length === 0){
+		if(this.__buffers.length === 0){
 			callback()
 			return
 		}
 		try{
-			JSON.parse(Buffer.concat(this.__buffer).toString(this.__encoding))
+			JSON.parse(Buffer.concat(this.__buffers).toString("utf8"))
 			callback([
 				new Error("Raw object detected!")
 			])
@@ -453,6 +463,7 @@ class Parser extends Transform {
 	 */
 	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
+		this.setDefaultEncoding(this.__encoding)
 		return this
 	}
 }

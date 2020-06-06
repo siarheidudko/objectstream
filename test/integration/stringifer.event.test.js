@@ -87,4 +87,20 @@ describe('Stringifer Events:', function() {
 		stringifer.end()
 		await Promise.race([ actionError, actionEnd ])
 	})
+	it('stringifer.on("end", () => {}), write null', async () => {
+		const stringifer = new ObjectStream.Stringifer()
+		stringifer.on('data', () => {})
+		const actionError = new Promise((res, rej) => {
+			stringifer.once('error', (e) => { console.log(e)
+				rej("action error")
+			})
+		})
+		const actionEnd = new Promise((res, rej) => {
+			stringifer.once('end', () => {
+				res("action end")
+			})
+		})
+		stringifer.push(null)
+		await Promise.race([ actionError, actionEnd ])
+	})
 })
