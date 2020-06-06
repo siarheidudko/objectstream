@@ -46,7 +46,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x, 14.x]
+        node-version: [6.x, 8.x, 10.x, 12.x, 14.x]
     steps:
       - name: Сheckout repo
         uses: actions/checkout@v2
@@ -72,7 +72,7 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: npm ci
-      - name: Install emulator and test library
+      - name: Install test library
         run: sudo npm install nyc mocha -g
-      - name: Run emulator
+      - name: Run test
         run: nyc npm run test

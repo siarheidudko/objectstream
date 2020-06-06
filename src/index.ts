@@ -146,6 +146,10 @@ class Stringifer extends Transform {
 		this.__bytesWrite += Buffer.byteLength(this.__separators.end, this.__encoding)
 		callback()
 	}
+	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
+		this.__encoding = encoding
+		return this
+	}
 }
 
 /**
@@ -336,6 +340,10 @@ class Parser extends Transform {
 		} catch(err){
 			callback([ err ])
 		}
+	}
+	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
+		this.__encoding = encoding
+		return this
 	}
 }
 

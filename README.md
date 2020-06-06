@@ -24,7 +24,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ## Use
     
 ```
-	let ObjectStream = require('./index.js');
+	let ObjectStream = require('@sergdudko/objectstream');
 	let stringifer = new ObjectStream.Stringifer();
 	let parser = new ObjectStream.Parser();
 	
