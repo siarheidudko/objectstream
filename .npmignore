@@ -1,6 +1,8 @@
 .gitignore
+.github
 node_modules
 object.json
 .nyc_output
 out
 docs
+src

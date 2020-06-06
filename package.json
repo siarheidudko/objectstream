@@ -1,13 +1,13 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "1.7.7",
+  "version": "2.0.0",
   "description": "Creates a stream to convert json from string or convert json to string.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha",
-    "doc": "jsdoc index.js README.md -d ./docs/",
-    "cov": "nyc mocha",
-	"eslint": "eslint index.js"
+    "test": "mocha test/**/*.test.js",
+    "doc": "typedoc src&&echo \"\">./docs/.nojekyll",
+    "lint": "tslint --project tsconfig.json",
+    "build": "rm -rf lib && tsc"
   },
   "author": "Siarhei Dudko",
   "license": "MIT",
@@ -22,25 +22,25 @@
     "object",
     "JSONStream",
     "jsonparse",
-	"jsonparser",
+    "jsonparser",
     "jsonstringify",
-	"jsonstringifer",
-	"docstream"
+    "jsonstringifer",
+    "docstream"
   ],
   "homepage": "https://siarheidudko.github.io/objectstream/index.html",
   "devDependencies": {
-    "eslint": "^6.7.2",
-    "jsdoc": "^3.6.3",
+    "@types/node": "^14.0.11",
     "lodash": "^4.17.15",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1"
+    "mocha": "^6.2.3",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
   },
   "dependencies": {},
   "engines": {
     "node": ">=8"
   },
   "directorie": {
-	"man": "./docs/",
+    "man": "./docs/",
     "test": "./test/"
   }
 }
