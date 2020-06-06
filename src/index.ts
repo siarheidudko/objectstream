@@ -13,6 +13,7 @@ import { Transform } from "stream"
 /**
  * Validate object
  * 
+ * @private
  * @param obj - object for validation
  * @param it - internal flag
  */
@@ -86,13 +87,36 @@ class Stringifer extends Transform {
 			end: end?end:""
 		}
 	}
+	/**
+	 * separators
+	 * 
+	 * @private
+	 */
 	private __separators: {
 		start: string,
 		middle: string,
 		end: string
 	}
+	/**
+	 * stream byte counter
+	 * 
+	 * @private
+	 */
 	private __bytesWrite: number = 0
+	/**
+	 * stream encoding
+	 * 
+	 * @private
+	 */
 	private __encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = "utf8"
+	/**
+	 * Data event handler
+	 * 
+	 * @private
+	 * @param object - object data
+	 * @param encoding - stream encoding
+	 * @param callback - callback function
+	 */
 	public _transform(object: {[key: string]: any}|null|undefined, encoding = this.__encoding, callback: Function = () => { return }) {
 		if(typeof(object) === "undefined"){
 			callback()
@@ -134,9 +158,21 @@ class Stringifer extends Transform {
 				return
 		}
 	}
+	/**
+	 * Flush event handler
+	 * 
+	 * @private
+	 * @param callback - callback function
+	 */
 	public _flush(callback = () => { return }){
 		callback()
 	}
+	/**
+	 * End event handler
+	 * 
+	 * @private
+	 * @param callback - callback function
+	 */
 	public _final(callback = () => { return }){
 		if(this.__bytesWrite === 0){
 			this.push(this.__separators.start+this.__separators.end)
@@ -146,6 +182,9 @@ class Stringifer extends Transform {
 		this.__bytesWrite += Buffer.byteLength(this.__separators.end, this.__encoding)
 		callback()
 	}
+	/**
+	 * set stream encoding
+	 */
 	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
 		return this
@@ -194,24 +233,72 @@ class Parser extends Transform {
 		}
 		this.__clear()
 	}
+	/**
+	 * separators
+	 * 
+	 * @private
+	 */
 	private __separators: {
 		start: number,
 		middle: number,
 		end: number
 	}
-	private __empty: Buffer = Buffer.from("")
+	/**
+	 * empty buffer
+	 * 
+	 * @private
+	 */
+	private static __empty: Buffer = Buffer.from("")
+	/**
+	 * stream byte counter
+	 * 
+	 * @private
+	 */
 	private __bytesRead: number = 0
+	/**
+	 * stream encoding
+	 * 
+	 * @private
+	 */
 	private __encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = "utf8"
+	/**
+	 * stream buffer
+	 * 
+	 * @private
+	 */
 	private __buffer: Buffer[] = []
+	/**
+	 * left brace counter
+	 * 
+	 * @private
+	 */
 	private __leftBrace: number = 0
+	/**
+	 * right brace counter
+	 * 
+	 * @private
+	 */
 	private __rightBrace: number = 0
+	/**
+	 * open quote flag
+	 * 
+	 * @private
+	 */
 	private __openQuotes: boolean = false
+	/**
+	 * clear buffer and reset counters
+	 * 
+	 * @private
+	 */
 	private __clear = () => {
 		this.__buffer = []
 		this.__leftBrace = 0
 		this.__rightBrace = 0
 		this.__openQuotes = false
 	}
+	/**
+	 * basic stream handler
+	 */
 	private __handler = (buffer: Buffer, s: number, errors: Error[]) => {
 		if(this.__buffer.length > 65536){
 			const _nbuffer = Buffer.concat(this.__buffer)
@@ -234,6 +321,14 @@ class Parser extends Transform {
 				" in JSON at position "+(this.__bytesRead+s)))
 		}
 	}
+	/**
+	 * Data event handler
+	 * 
+	 * @private
+	 * @param string - string or buffer data
+	 * @param encoding - stream encoding
+	 * @param callback - callback function
+	 */
 	public _transform(string: string|Buffer|null|undefined, encoding = this.__encoding, callback: Function = () => { return }) {
 		this.__encoding = encoding
 		if(typeof(string) === "undefined"){
@@ -256,7 +351,7 @@ class Parser extends Transform {
 			])
 			return
 		}
-		if(this.__empty.equals(_buffer)){
+		if(Parser.__empty.equals(_buffer)){
 			callback()
 			return
 		}
@@ -323,10 +418,22 @@ class Parser extends Transform {
 			callback()
 		this.__bytesRead += _buffer.byteLength
 	}
+	/**
+	 * Flush event handler
+	 * 
+	 * @private
+	 * @param callback - callback function
+	 */
 	public _flush(callback: Function = () => { return }){
 		this.__clear()
 		callback()
 	}
+	/**
+	 * End event handler
+	 * 
+	 * @private
+	 * @param callback - callback function
+	 */
 	public _final(callback: Function = () => { return }){
 		if(this.__buffer.length === 0){
 			callback()
@@ -341,6 +448,9 @@ class Parser extends Transform {
 			callback([ err ])
 		}
 	}
+	/**
+	 * set stream encoding
+	 */
 	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
 		return this
@@ -348,6 +458,12 @@ class Parser extends Transform {
 }
 
 export = module.exports = {
+	/**
+	 * Object to String stream
+	 */
 	Stringifer,
+	/**
+	 * String to Object stream
+	 */
 	Parser
 }

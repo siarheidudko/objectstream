@@ -1,7 +1,7 @@
 "use strict"
-require('mocha');
-const Lodash = require('lodash');
-let ObjectStream = require('../../lib/index.js');
+require('mocha')
+const Lodash = require('lodash')
+const ObjectStream = require('../../lib/index.js')
 
 describe('Parser: Invalid data type:', function() {
 	it('err[0].message === "Incoming data type is number, require data type is String!"', async () => {

@@ -2,89 +2,89 @@
 require('mocha')
 const ObjectStream = require('../../lib/index.js')
 
-describe('Parser Events:', function() {
-	it('parser.on("data", (e) => {})', async () => {
-		const parser = new ObjectStream.Parser()
+describe('Stringifer Events:', function() {
+	it('stringifer.on("data", (e) => {})', async () => {
+		const stringifer = new ObjectStream.Stringifer()
 		const actionError = new Promise((res, rej) => {
-			parser.once('error', (e) => {
+			stringifer.once('error', (e) => {
 				rej("action error" + JSON.stringify(e))
 			})
 		})
 		const actionData = new Promise((res, rej) => {
-			parser.once('data', (e) => {
+			stringifer.once('data', (e) => {
 				res("action data")
 			})
 		})
 		const actionFinish = new Promise((res, rej) => {
-			parser.once('finish', () => {
+			stringifer.once('finish', () => {
 				rej("action finish")
 			})
 		})
 		const actionEnd = new Promise((res, rej) => {
-			parser.once('end', () => {
+			stringifer.once('end', () => {
 				rej("action end")
 			})
 		})
-		parser.write('{"a":1}')
+		stringifer.write({"a":1})
 		await Promise.race([ actionData, actionError, actionFinish, actionEnd ])
-		parser.end()
+		stringifer.end()
 	})
-	it('parser.on("error", (e) => {})', async () => {
-		const parser = new ObjectStream.Parser()
+	it('stringifer.on("error", (e) => {})', async () => {
+		const stringifer = new ObjectStream.Stringifer()
 		const actionError = new Promise((res, rej) => {
-			parser.once('error', (e) => {
+			stringifer.once('error', (e) => {
 				res("action error")
 			})
 		})
 		const actionData = new Promise((res, rej) => {
-			parser.once('data', (e) => {
+			stringifer.once('data', (e) => {
 				rej("action data")
 			})
 		})
 		const actionFinish = new Promise((res, rej) => {
-			parser.once('finish', () => {
+			stringifer.once('finish', () => {
 				rej("action finish")
 			})
 		})
 		const actionEnd = new Promise((res, rej) => {
-			parser.once('end', () => {
+			stringifer.once('end', () => {
 				rej("action end")
 			})
 		})
-		parser.write('}')
+		stringifer.write('}')
 		await Promise.race([ actionData, actionError, actionFinish, actionEnd ])
-		parser.end()
+		stringifer.end()
 	})
-	it('finish.on("error", () => {})', async () => {
-		const parser = new ObjectStream.Parser()
-		parser.on('data', () => {})
+	it('stringifer.on("finish", () => {})', async () => {
+		const stringifer = new ObjectStream.Stringifer()
+		stringifer.on('data', () => {})
 		const actionError = new Promise((res, rej) => {
-			parser.once('error', (e) => {
+			stringifer.once('error', (e) => {
 				rej("action error")
 			})
 		})
 		const actionFinish = new Promise((res, rej) => {
-			parser.once('finish', () => {
+			stringifer.once('finish', () => {
 				res("action finish")
 			})
 		})
-		parser.end()
+		stringifer.end()
 		await Promise.race([ actionError, actionFinish ])
 	})
-	it('parser.on("end", () => {})', async () => {
-		const parser = new ObjectStream.Parser()
-		parser.on('data', () => {})
+	it('stringifer.on("end", () => {})', async () => {
+		const stringifer = new ObjectStream.Stringifer()
+		stringifer.on('data', () => {})
 		const actionError = new Promise((res, rej) => {
-			parser.once('error', (e) => {
+			stringifer.once('error', (e) => {
 				rej("action error")
 			})
 		})
 		const actionEnd = new Promise((res, rej) => {
-			parser.once('end', () => {
+			stringifer.once('end', () => {
 				res("action end")
 			})
 		})
-		parser.end()
+		stringifer.end()
 		await Promise.race([ actionError, actionEnd ])
 	})
 })
