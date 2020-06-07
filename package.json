@@ -8,10 +8,10 @@
     "doc": "typedoc src&&echo \"\">./docs/.nojekyll",
     "lint": "tslint --project tsconfig.json",
     "build": "rm -rf lib && tsc",
-    "testv10": "docker run --name=objectstream-node10 --rm -v /Users/siarhei/Projects/objectstream/:/app node10:1.0.0 nyc npm run test",
-    "testv12": "docker run --name=objectstream-node12 --rm -v /Users/siarhei/Projects/objectstream/:/app node12:1.0.0 nyc npm run test",
-    "testv13": "docker run --name=objectstream-node13 --rm -v /Users/siarhei/Projects/objectstream/:/app node13:1.0.0 nyc npm run test",
-    "testv14": "docker run --name=objectstream-node14 --rm -v /Users/siarhei/Projects/objectstream/:/app node14:1.0.0 nyc npm run test"
+    "testv10": "docker run --name=objectstream-node10 --rm -v $PWD:/app node10:1.0.0 nyc npm run test",
+    "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
+    "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",
+    "testv14": "docker run --name=objectstream-node14 --rm -v $PWD:/app node14:1.0.0 nyc npm run test"
   },
   "author": "Siarhei Dudko",
   "license": "MIT",
