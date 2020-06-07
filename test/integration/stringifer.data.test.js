@@ -7,10 +7,10 @@ describe('Stringifer: Invalid data type:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
-				if(err.message === 'Incoming data type is number, require data type is pure Object!') 
+				if(err[0].message === 'Incoming data type is number, require data type is pure Object!') 
 					res()
 				else
-					rej(err)
+					rej(err[0].message)
 			})
 		})
 		stringifer.write(1)
@@ -21,10 +21,10 @@ describe('Stringifer: Invalid data type:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
-				if(err.message === 'Validation failed, incoming data type is not pure Object!')
+				if(err[0].message === 'Validation failed, incoming data type is not pure Object!')
 					res()
 				else
-					rej(err)
+					rej(err[0].message)
 			})
 		})
 		stringifer.write(Buffer.from('dfdssad'))
@@ -35,10 +35,10 @@ describe('Stringifer: Invalid data type:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
-				if(err.message === 'Validation failed, incoming data type is not pure Object!')
+				if(err[0].message === 'Validation failed, incoming data type is not pure Object!')
 					res()
 				else
-					rej(err)
+					rej(err[0].message)
 			})
 		})
 		stringifer.write([1,2,3])
@@ -49,10 +49,10 @@ describe('Stringifer: Invalid data type:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
-				if(err.message === 'Validation failed, incoming data type is not pure Object!')
+				if(err[0].message === 'Validation failed, incoming data type is not pure Object!')
 					res()
 				else
-					rej(err)
+					rej(err[0].message)
 			})
 		})
 		stringifer.write({a:new Buffer.from("t")})
@@ -63,10 +63,10 @@ describe('Stringifer: Invalid data type:', function() {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
-				if(err.message === 'Validation failed, incoming data type is not pure Object!')
+				if(err[0].message === 'Validation failed, incoming data type is not pure Object!')
 					res()
 				else
-					rej(err)
+					rej(err[0].message)
 			})
 		})
 		stringifer.write({a:{b:{c: 2, d:function(){}}}})
