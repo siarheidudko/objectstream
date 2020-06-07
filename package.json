@@ -1,13 +1,13 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "./lib/index.js",
   "scripts": {
     "test": "mocha test/**/*.test.js",
     "doc": "typedoc src&&echo \"\">./docs/.nojekyll",
     "lint": "tslint --project tsconfig.json",
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc --declaration --declarationMap --sourceMap",
     "testv10": "docker run --name=objectstream-node10 --rm -v $PWD:/app node10:1.0.0 nyc npm run test",
     "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
     "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",

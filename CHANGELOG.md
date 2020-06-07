@@ -1,3 +1,8 @@
+# 2.0.2 / 2020-06-07
+
+## :tada: Enhancements
+- Added TypeScript declaration
+
 # 2.0.1 / 2020-06-07
 
 ## :tada: Enhancements
