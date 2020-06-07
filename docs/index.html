@@ -164,6 +164,10 @@
     <span class="hljs-comment">// PIPE</span>
 
     stringToObject.pipe(objectToString)</code></pre>
+				<a href="#warning" id="warning" style="color: inherit; text-decoration: none;">
+					<h2>WARNING</h2>
+				</a>
+				<p>Streams behave unexpectedly when processing errors in versions node 13 and 14. In these versions, you need to make sure that in case of an error the stream will be destroyed or the processing of the stream will continue.</p>
 				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
 					<h2>EXAMPLE</h2>
 				</a>

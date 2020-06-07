@@ -77,8 +77,8 @@ describe('Pipe one byte:', function() {
 			nstring.push(Buffer.from(end))
 			parser.end()
 			await p
-		})
-		it(encoding + " with errors", async () => {
+		})	
+		if(Number.parseInt(process.versions["node"].substr(0,2)) <= 12) it(encoding + " with errors", async () => {
 			let nstring = [Buffer.from(start)]
 			let rstring = [Buffer.from("")]
 			const parser = (new ObjectStream.Parser(start, sep, end))
@@ -171,7 +171,7 @@ describe('Pipe with different encodings:', function() {
 			parser.end()
 			await p
 		})
-		it(encoding + " with errors", async () => {
+		if(Number.parseInt(process.versions["node"].substr(0,2)) <= 12) it(encoding + " with errors", async () => {
 			let nstring = [Buffer.from(start)]
 			let rstring = [Buffer.from("")]
 			const parser = (new ObjectStream.Parser(start, sep, end)).setEncoding(encoding)

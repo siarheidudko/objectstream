@@ -88,6 +88,9 @@ Creates a stream to convert json from string or convert json to drain. The strea
 	stringToObject.pipe(objectToString)
 ```
 
+## WARNING
+Streams behave unexpectedly when processing errors in versions node 13 and 14. In these versions, you need to make sure that in case of an error the stream will be destroyed or the processing of the stream will continue.
+
 ## EXAMPLE
 [see test directory](https://github.com/siarheidudko/objectstream/tree/master/test)
   
