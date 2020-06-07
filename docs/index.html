@@ -67,7 +67,7 @@
 				<a href="#sergdudkoobjectstream" id="sergdudkoobjectstream" style="color: inherit; text-decoration: none;">
 					<h1>@sergdudko/objectstream</h1>
 				</a>
-				<p>Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.. </p>
+				<p>Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream. </p>
 				<p><a href="https://www.npmjs.com/package/@sergdudko/objectstream"><img src="https://img.shields.io/npm/v/@sergdudko/objectstream.svg" alt="npm"></a>
 					<a href="https://www.npmjs.com/package/@sergdudko/objectstream"><img src="https://img.shields.io/npm/dy/@sergdudko/objectstream.svg" alt="npm"></a>
 					<a href="https://www.npmjs.com/package/@sergdudko/objectstream"><img src="https://img.shields.io/npm/l/@sergdudko/objectstream.svg" alt="NpmLicense"></a>
@@ -77,131 +77,97 @@
 					<li>Based on native methods of NodeJS</li>
 				</ul>
 				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-					<h2>Install</h2>
+					<h2>INSTALL</h2>
 				</a>
-				<pre><code>    <span class="hljs-built_in">npm</span> i @sergdudko/objectstream --save</code></pre>
+				<pre><code class="language-bash">    npm i @sergdudko/objectstream --save</code></pre>
 				<a href="#docs" id="docs" style="color: inherit; text-decoration: none;">
-					<h2>Docs</h2>
+					<h2>DOCS</h2>
 				</a>
 				<p><a href="https://siarheidudko.github.io/objectstream/index.html">See docs</a></p>
+				<a href="#supported-encoding" id="supported-encoding" style="color: inherit; text-decoration: none;">
+					<h2>SUPPORTED ENCODING</h2>
+				</a>
+				<table>
+					<thead>
+						<tr>
+							<th>Stream</th>
+							<th>incoming stream</th>
+							<th>outgoing stream</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>Stringifer</td>
+							<td>utf8 (object mode)</td>
+							<td>utf8, base64, latin1, binary, hex</td>
+						</tr>
+						<tr>
+							<td>Parser</td>
+							<td>utf8, base64, latin1, binary, hex</td>
+							<td>utf8 (object mode)</td>
+						</tr>
+				</tbody></table>
 				<a href="#use" id="use" style="color: inherit; text-decoration: none;">
-					<h2>Use</h2>
+					<h2>USE</h2>
 				</a>
-				<pre><code>    let ObjectStream = require(<span class="hljs-string">'@sergdudko/objectstream'</span>);
-    let stringifer = new ObjectStream.Stringifer();
-    let parser = new ObjectStream.Parser();
+				<pre><code class="language-js">    <span class="hljs-comment">// REQUIRE OR IMPORT CLASS</span>
 
-    stringifer.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
-        <span class="hljs-comment">//data event return string (based on JSON.stringify method)</span>
-    });
-    stringifer.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span>{</span>
-        <span class="hljs-comment">//error event return err (instanceof Error)</span>
-    });
-    stringifer.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
-        <span class="hljs-comment">//end event</span>
-    });
-    stringifer.on(<span class="hljs-string">'finish'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        <span class="hljs-comment">//finish event</span>
-    });
+    <span class="hljs-keyword">const</span> Stringifer = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@sergdudko/objectstream"</span>).Stringifer
+    <span class="hljs-keyword">const</span> Parser = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@sergdudko/objectstream"</span>).Parser
+    <span class="hljs-comment">// or use import</span>
+    <span class="hljs-keyword">import</span> { Stringifer, Parser } <span class="hljs-keyword">from</span> <span class="hljs-string">"@sergdudko/objectstream"</span>
 
-    parser.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
-        <span class="hljs-comment">//data event return object (based on JSON.parse method)</span>
-    });
-    parser.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(errors)</span>{</span>
-        <span class="hljs-comment">//error event return Array of error (instanceof Error)</span>
-        errors.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span>{</span>
-            <span class="hljs-comment">//err (instanceof Error)</span>
-        });
-    });
-    parser.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
-        <span class="hljs-comment">//end event</span>
-    });
-    parser.on(<span class="hljs-string">'finish'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        <span class="hljs-comment">//finish event</span>
-    });
+    <span class="hljs-comment">// CREATE STREAM</span>
 
-    stringifer.write(<span class="hljs-number">1</span>);        <span class="hljs-comment">//Error event: Error: Incoming data type is number, require data type is pure Object!</span>
-    stringifer.write({w:<span class="hljs-number">1</span>});    <span class="hljs-comment">//Data event: {"w":1}</span>
-    stringifer.<span class="hljs-keyword">end</span>({w:<span class="hljs-number">1</span>});        <span class="hljs-comment">//Data event: {"w":1}, End event, Finish event</span>
+    <span class="hljs-keyword">const</span> firstSeparator = <span class="hljs-string">"["</span>
+    <span class="hljs-keyword">const</span> middleSeparator = <span class="hljs-string">","</span>
+    <span class="hljs-keyword">const</span> endSeparator = <span class="hljs-string">"]"</span>
+    <span class="hljs-keyword">const</span> stringToObject = <span class="hljs-keyword">new</span> Parser(firstSeparator, middleSeparator, endSeparator)
+    <span class="hljs-keyword">const</span> objectToString = <span class="hljs-keyword">new</span> Stringifer(firstSeparator, middleSeparator, endSeparator)
 
-    parser.write(<span class="hljs-string">'@'</span>);                <span class="hljs-comment">//Error event: Error: Unexpected token @ in JSON at position 0</span>
-    parser.write(<span class="hljs-string">'{"</span>w<span class="hljs-string">":1}\r{"</span>b<span class="hljs-string">":2, "</span>a<span class="hljs-string">": false}, [{"</span>f<span class="hljs-string">":3}, {"</span>c<span class="hljs-string">":]10 }{"</span>g<span class="hljs-string">":1}{}{u:0}'</span>);        
-    <span class="hljs-comment">//Data event: {w:1}, </span>
-    <span class="hljs-comment">//Data event: {b:2, a: false}, </span>
-    <span class="hljs-comment">//Data event: {f:3}, </span>
-    <span class="hljs-comment">//Data event: {g:1}, </span>
-    <span class="hljs-comment">//Data event: {}, </span>
-    <span class="hljs-comment">//Error event: </span>
-    <span class="hljs-comment">//Error: Unexpected token , in JSON at position 27</span>
-    <span class="hljs-comment">//Error: Unexpected token   in JSON at position 28</span>
-    <span class="hljs-comment">//Error: Unexpected token [ in JSON at position 29</span>
-    <span class="hljs-comment">//Error: Unexpected token , in JSON at position 37</span>
-    <span class="hljs-comment">//Error: Unexpected token   in JSON at position 38</span>
-    <span class="hljs-comment">//SyntaxError: Unexpected token ] in JSON at position 5</span>
-    <span class="hljs-comment">//SyntaxError: Unexpected token u in JSON at position 1</span>
-    parser.<span class="hljs-keyword">end</span>(<span class="hljs-string">'{"</span>w<span class="hljs-string">":1}'</span>);            <span class="hljs-comment">//Data event: {"w":1}, End event, Finish event</span></code></pre>
-				<a href="#test" id="test" style="color: inherit; text-decoration: none;">
-					<h2>TEST</h2>
+    <span class="hljs-comment">// EVENTS</span>
+
+    stringToObject.on(<span class="hljs-string">"data"</span>, (e) =&gt; {
+        <span class="hljs-comment">// e - is Object</span>
+    })
+    stringToObject.on(<span class="hljs-string">"error"</span>, (d) =&gt; {
+        <span class="hljs-comment">// e - Array of Error</span>
+    })
+    stringToObject.on(<span class="hljs-string">"end"</span>, () =&gt; {
+        <span class="hljs-comment">// end event</span>
+    })
+    stringToObject.on(<span class="hljs-string">"finish"</span>, () =&gt; {
+        <span class="hljs-comment">// finish event</span>
+    })
+    objectToString.on(<span class="hljs-string">"data"</span>, (e) =&gt; {
+        <span class="hljs-comment">// e - is Buffer (deault, if you need a string use setEncoding)</span>
+    })
+    objectToString.on(<span class="hljs-string">"error"</span>, (d) =&gt; {
+        <span class="hljs-comment">// e - Array of Error</span>
+    })
+    objectToString.on(<span class="hljs-string">"end"</span>, () =&gt; {
+        <span class="hljs-comment">// end event</span>
+    })
+    objectToString.on(<span class="hljs-string">"finish"</span>, () =&gt; {
+        <span class="hljs-comment">// finish event</span>
+    })
+
+    <span class="hljs-comment">// CHANGE ENCODING</span>
+
+    stringToObject.setEncoding(<span class="hljs-string">"latin1"</span>)
+    objectToString.setEncoding(<span class="hljs-string">"latin1"</span>)
+
+    <span class="hljs-comment">// WRITE DATA (example for utf8)</span>
+
+    stringToObject.write(<span class="hljs-string">"{\"boolean\":true}"</span>)
+    objectToString.write({<span class="hljs-attr">boolean</span>: <span class="hljs-literal">true</span>})
+
+    <span class="hljs-comment">// PIPE</span>
+
+    stringToObject.pipe(objectToString)</code></pre>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h2>EXAMPLE</h2>
 				</a>
-				<pre><code>    let ObjectStream = require(<span class="hljs-string">'@sergdudko/objectstream'</span>);
-
-    const start = <span class="hljs-string">'['</span>,
-          sep = <span class="hljs-string">','</span>,
-          end = <span class="hljs-string">']'</span>;
-
-    let stringifer = <span class="hljs-built_in">new</span> ObjectStream.Stringifer(<span class="hljs-keyword">start</span>, sep, <span class="hljs-keyword">end</span>),
-        parser = <span class="hljs-built_in">new</span> ObjectStream.<span class="hljs-keyword">Parser</span>(<span class="hljs-keyword">start</span>, sep, <span class="hljs-keyword">end</span>),
-        stringifer2 = <span class="hljs-built_in">new</span> ObjectStream.Stringifer(<span class="hljs-keyword">start</span>, sep, <span class="hljs-keyword">end</span>),
-        parser2 = <span class="hljs-built_in">new</span> ObjectStream.<span class="hljs-keyword">Parser</span>(<span class="hljs-keyword">start</span>, sep, <span class="hljs-keyword">end</span>);
-
-    const <span class="hljs-keyword">object</span> = {
-        number: <span class="hljs-number">1234567890</span>,
-        string_en: "abcdefghijklmnopqrstuvwxyz",
-        string_ru: "абвгдеёжзийклмнопртуфхцчшщъыьэюя",
-        string_ascii: "\b\t\n\f\r\0\v",
-        <span class="hljs-type">bool</span>: <span class="hljs-keyword">true</span>,
-        <span class="hljs-keyword">array</span>: ["a", <span class="hljs-number">1</span>, <span class="hljs-keyword">true</span>],
-        <span class="hljs-keyword">object</span>: {a:"a", "b":<span class="hljs-number">1</span>, c:<span class="hljs-keyword">true</span>}
-    }
-    const string = <span class="hljs-type">JSON</span>.stringify(<span class="hljs-keyword">object</span>);
-    const buffer = Buffer.<span class="hljs-keyword">from</span>(string);
-    let nstring = <span class="hljs-keyword">start</span>;
-    let rstring = <span class="hljs-string">''</span>;
-
-    stringifer.<span class="hljs-keyword">on</span>(<span class="hljs-string">'data'</span>, <span class="hljs-keyword">function</span>(data){
-        <span class="hljs-keyword">if</span>(data)
-            rstring += data;
-    }).<span class="hljs-keyword">on</span>(<span class="hljs-string">'end'</span>, <span class="hljs-keyword">function</span>(data){
-        <span class="hljs-keyword">if</span>(data)
-            rstring += data;
-        console.log(<span class="hljs-string">'in :'</span>, <span class="hljs-type">JSON</span>.parse(nstring));
-        console.log(<span class="hljs-string">'\r\nout:'</span>,<span class="hljs-type">JSON</span>.parse(rstring));
-        <span class="hljs-keyword">if</span>((nstring === rstring)){
-            console.log(<span class="hljs-string">'\r\n******************** Test Pipe is succeed! ********************'</span>);
-        } <span class="hljs-keyword">else</span> {
-            console.error(<span class="hljs-string">'\r\n****************** Test Pipe is not succeed! ******************'</span>);
-        }
-    }).<span class="hljs-keyword">on</span>(<span class="hljs-string">'error'</span>, <span class="hljs-keyword">function</span>(data){ console.error(data); });
-
-
-    <span class="hljs-keyword">parser</span>.<span class="hljs-keyword">on</span>(<span class="hljs-string">'error'</span>, <span class="hljs-keyword">function</span>(data){ console.log(data); });
-    stringifer2.<span class="hljs-keyword">on</span>(<span class="hljs-string">'error'</span>, <span class="hljs-keyword">function</span>(data){ console.log(data); });
-    parser2.<span class="hljs-keyword">on</span>(<span class="hljs-string">'error'</span>, <span class="hljs-keyword">function</span>(data){ console.log(data); });
-
-    <span class="hljs-keyword">parser</span>.pipe(stringifer2).pipe(parser2).pipe(stringifer);
-
-    <span class="hljs-keyword">for</span>(let i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++){
-        <span class="hljs-keyword">for</span>(let j = <span class="hljs-number">0</span>; j &lt; Buffer.byteLength(buffer); j++){
-            <span class="hljs-keyword">parser</span>.<span class="hljs-keyword">write</span>(buffer.<span class="hljs-keyword">slice</span>(j, j+<span class="hljs-number">1</span>));
-        }
-        <span class="hljs-keyword">if</span>(i === <span class="hljs-number">0</span>){
-            nstring += string;
-        } <span class="hljs-keyword">else</span> {
-            nstring += sep+string;
-        }
-    }
-    nstring += <span class="hljs-keyword">end</span>;
-    <span class="hljs-keyword">parser</span>.<span class="hljs-keyword">end</span>();</code></pre>
+				<p><a href="https://github.com/siarheidudko/objectstream/tree/master/test">see test directory</a></p>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 					<h2>LICENSE</h2>
 				</a>

@@ -87,6 +87,9 @@ class Stringifer extends Transform {
 			end: Buffer.from(end?end:"", "utf8")
 		}
 		this.__isString = false
+		this.__bytesWrite = 0
+		this.__encoding = "utf8"
+		this.setDefaultEncoding(this.__encoding)
 	}
 	/**
 	 * separators
@@ -109,13 +112,13 @@ class Stringifer extends Transform {
 	 * 
 	 * @private
 	 */
-	private __bytesWrite: number = 0
+	private __bytesWrite: number
 	/**
 	 * stream encoding
 	 * 
 	 * @private
 	 */
-	private __encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = "utf8"
+	private __encoding: "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex"
 	/**
 	 * Data event handler
 	 * 
@@ -124,7 +127,7 @@ class Stringifer extends Transform {
 	 * @param encoding - stream encoding
 	 * @param callback - callback function
 	 */
-	public _transform(object: {[key: string]: any}|null|undefined, encoding = this.__encoding, callback: Function = () => { return }) {
+	public _transform(object: {[key: string]: any}|null|undefined, encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = this.__encoding, callback: Function = () => { return }) {
 		if(typeof(object) === "undefined"){
 			callback()
 			return
@@ -139,7 +142,7 @@ class Stringifer extends Transform {
 			case "object":
 				try{
 					if(validator(object, false) !== true) {
-						callback(new Error("Validation failed, incoming data type is not pure Object!"))
+						callback([new Error("Validation failed, incoming data type is not pure Object!")])
 						return
 					}
 					let _buffer: Buffer = Buffer.from(JSON.stringify(object), "utf8")
@@ -154,7 +157,7 @@ class Stringifer extends Transform {
 					callback()
 					return
 				} catch (err){
-					callback(err)
+					callback([err])
 					return
 				}
 			case "undefined":
@@ -195,9 +198,10 @@ class Stringifer extends Transform {
 	/**
 	 * set stream encoding
 	 */
-	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
+	public setEncoding = (encoding: "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
 		this.setDefaultEncoding(this.__encoding)
+		this.__isString = true
 		return this
 	}
 }
@@ -243,6 +247,13 @@ class Parser extends Transform {
 			end: Buffer.from(end?end:"", "utf8")[0]
 		}
 		this.__clear()
+		this.__bytesRead = 0
+		this.__encoding = "utf8"
+		this.setDefaultEncoding(this.__encoding)
+		this.__buffers = []
+		this.__leftBrace = 0
+		this.__rightBrace = 0
+		this.__openQuotes = false
 	}
 	/**
 	 * separators
@@ -265,37 +276,37 @@ class Parser extends Transform {
 	 * 
 	 * @private
 	 */
-	private __bytesRead: number = 0
+	private __bytesRead: number
 	/**
 	 * stream encoding
 	 * 
 	 * @private
 	 */
-	private __encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = "utf8"
+	private __encoding: "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex"
 	/**
 	 * stream buffer
 	 * 
 	 * @private
 	 */
-	private __buffers: Buffer[] = []
+	private __buffers: Buffer[]
 	/**
 	 * left brace counter
 	 * 
 	 * @private
 	 */
-	private __leftBrace: number = 0
+	private __leftBrace: number
 	/**
 	 * right brace counter
 	 * 
 	 * @private
 	 */
-	private __rightBrace: number = 0
+	private __rightBrace: number
 	/**
 	 * open quote flag
 	 * 
 	 * @private
 	 */
-	private __openQuotes: boolean = false
+	private __openQuotes: boolean
 	/**
 	 * clear buffer and reset counters
 	 * 
@@ -340,7 +351,7 @@ class Parser extends Transform {
 	 * @param encoding - stream encoding
 	 * @param callback - callback function
 	 */
-	public _transform(string: string|Buffer|null|undefined, encoding = this.__encoding, callback: Function = () => { return }) {
+	public _transform(string: string|Buffer|null|undefined, encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = this.__encoding, callback: Function = () => { return }) {
 		if(typeof(string) === "undefined"){
 			callback()
 			return
@@ -385,7 +396,7 @@ class Parser extends Transform {
 				case 0x0b:
 					if(this.__openQuotes && (this.__leftBrace !== 0))
 						this.__buffers.push(
-							Buffer.from("\\u"+("0000" + _buffer[s].toString(16)).slice(-4), this.__encoding)
+							Buffer.from("\\u"+("0000" + _buffer[s].toString(16)).slice(-4), "utf8")
 						)
 					break
 				case 0x22:
@@ -401,7 +412,9 @@ class Parser extends Transform {
 			}
 			if((this.__leftBrace !== 0) && (this.__leftBrace === this.__rightBrace)){
 				try{
-					const _object = JSON.parse(Buffer.concat(this.__buffers).toString("utf8"))
+					const _buf: Buffer = Buffer.concat(this.__buffers)
+					const _str: string = _buf.toString("utf8")
+					const _object = JSON.parse(_str)
 					if(validator(_object, false)){
 						this.__clear()
 						this.push(_object)
@@ -450,7 +463,9 @@ class Parser extends Transform {
 			return
 		}
 		try{
-			JSON.parse(Buffer.concat(this.__buffers).toString("utf8"))
+			const _buf: Buffer = Buffer.concat(this.__buffers)
+			const _str: string = _buf.toString("utf8")
+			JSON.parse(_str)
 			callback([
 				new Error("Raw object detected!")
 			])
@@ -461,7 +476,7 @@ class Parser extends Transform {
 	/**
 	 * set stream encoding
 	 */
-	public setEncoding = (encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex") => {
+	public setEncoding = (encoding: "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex") => {
 		this.__encoding = encoding
 		this.setDefaultEncoding(this.__encoding)
 		return this

@@ -63,8 +63,8 @@ describe('Set encoding:', function() {
         stringifer.setEncoding("latin1")
         const p = new Promise((res, rej) => {
 			stringifer.once('data', (data) => {
-                const string = Buffer.from('{"w":"тестовое сообщение"}')
-				if(string.equals(data))
+                const string = Buffer.from('{"w":"тестовое сообщение"}').toString("latin1")
+				if(data === string)
 					res()
 				else
 					rej("Not Equal")
