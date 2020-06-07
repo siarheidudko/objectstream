@@ -164,7 +164,7 @@ class Stringifer extends Transform {
 				callback()
 				return
 			default:
-				callback(new Error("Incoming data type is "+typeof(object)+", require data type is pure Object!"))
+				callback([new Error("Incoming data type is "+typeof(object)+", require data type is pure Object!")])
 				return
 		}
 	}

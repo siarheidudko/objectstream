@@ -3,7 +3,7 @@ require('mocha')
 const ObjectStream = require('../../lib/index.js')
 
 describe('Stringifer: Invalid data type:', function() {
-	it('err.message === "Incoming data type is number, require data type is pure Object!"', async () => {
+	it('err[0].message === "Incoming data type is number, require data type is pure Object!"', async () => {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
@@ -17,7 +17,7 @@ describe('Stringifer: Invalid data type:', function() {
 		await p
 		stringifer.end()
 	})
-	it('err.message === "Validation failed, incoming data type is not pure Object!"', async () => {
+	it('err[0].message === "Validation failed, incoming data type is not pure Object!"', async () => {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
@@ -31,7 +31,7 @@ describe('Stringifer: Invalid data type:', function() {
 		await p
 		stringifer.end()
 	})
-	it('err.message === "Validation failed, incoming data type is not pure Object!"', async () => {
+	it('err[0].message === "Validation failed, incoming data type is not pure Object!"', async () => {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
@@ -45,7 +45,7 @@ describe('Stringifer: Invalid data type:', function() {
 		await p
 		stringifer.end()
 	})
-	it('err.message === "Validation failed, incoming data type is not pure Object!"', async () => {
+	it('err[0].message === "Validation failed, incoming data type is not pure Object!"', async () => {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
@@ -59,7 +59,7 @@ describe('Stringifer: Invalid data type:', function() {
 		await p
 		stringifer.end()
 	})
-	it('err.message === "Validation failed, incoming data type is not pure Object!"', async () => {
+	it('err[0].message === "Validation failed, incoming data type is not pure Object!"', async () => {
 		const stringifer = new ObjectStream.Stringifer()
 		const p = new Promise((res, rej) => {
 			stringifer.once('error', function(err){
