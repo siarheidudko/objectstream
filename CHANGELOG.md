@@ -1,3 +1,13 @@
+# 2.0.4 / 2020-06-08
+
+## :tada: Enhancements
+- Size optimization
+
+# 2.0.3 / 2020-06-08
+
+## :tada: Enhancements
+- Size optimization
+
 # 2.0.2 / 2020-06-07
 
 ## :tada: Enhancements
