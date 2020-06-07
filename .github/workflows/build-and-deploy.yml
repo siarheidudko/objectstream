@@ -1,4 +1,4 @@
-name: Build, test and deploy
+name: Build and deploy
 on:
   push:
     tags:
@@ -80,7 +80,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            see [CHANGELOG.md](https://github.com/siarheidudko/firebase-engine/blob/master/CHANGELOG.md)
+            see [CHANGELOG.md](https://github.com/siarheidudko/objectstream/blob/master/CHANGELOG.md)
           draft: false
           prerelease: false
       - name: Set registry npm packages
