@@ -1,14 +1,14 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "test": "mocha test/**/*.test.js",
     "doc": "typedoc src&&echo \"\">./docs/.nojekyll",
-    "lint": "tslint --project tsconfig.json",
-    "build": "rm -rf lib && tsc --declaration --declarationMap --sourceMap",
+    "lint": "eslint -c .eslintrc.js --ext .ts src",
+    "build": "rm -rf lib && tsc --declaration",
     "testv10": "docker run --name=objectstream-node10 --rm -v $PWD:/app node10:1.0.0 nyc npm run test",
     "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
     "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",
@@ -35,9 +35,13 @@
   "homepage": "https://siarheidudko.github.io/objectstream/index.html",
   "devDependencies": {
     "@types/node": "^14.0.11",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
     "lodash": "^4.17.15",
     "mocha": "^6.2.3",
-    "tslint": "^6.1.2",
     "typescript": "^3.9.5"
   },
   "dependencies": {},

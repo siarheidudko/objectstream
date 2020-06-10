@@ -13,3 +13,4 @@ package-lock.json
 tsconfig.json
 tslint.json
 typedoc.json
+*.log

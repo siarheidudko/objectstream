@@ -1,3 +1,8 @@
+# 2.0.5 / 2020-06-10
+
+## :tada: Enhancements
+- Replaced tslint with eslint
+
 # 2.0.4 / 2020-06-08
 
 ## :tada: Enhancements
