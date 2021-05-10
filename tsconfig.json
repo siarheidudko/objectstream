@@ -6,11 +6,18 @@
       "outDir": "lib",
       "sourceMap": true,
       "strict": true,
-      "target": "es2017",
+      "target": "es2018",
       "resolveJsonModule": true
     },
     "compileOnSave": true,
     "include": [
       "src"
-    ]
+    ],
+    "typedocOptions": {
+      "out": "./docs/",
+      "theme": "default",
+      "name": "ObjectStream",
+      "includeVersion": true,
+      "hideGenerator": true
+    }
   }
