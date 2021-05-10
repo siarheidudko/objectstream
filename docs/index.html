@@ -3,17 +3,18 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@sergdudko/objectstream</title>
-	<meta name="description" content="">
+	<title>ObjectStream - v2.0.6</title>
+	<meta name="description" content="Documentation for ObjectStream - v2.0.6">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@sergdudko/objectstream</a>
+					<a href="index.html" class="title">ObjectStream - v2.0.6</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -40,8 +41,6 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -51,12 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
-			<h1>@sergdudko/objectstream</h1>
+			<h1>ObjectStream - v2.0.6</h1>
 		</div>
 	</div>
 </header>
@@ -79,7 +73,8 @@
 				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
 					<h2>INSTALL</h2>
 				</a>
-				<pre><code class="language-bash">    npm i @sergdudko/objectstream --save</code></pre>
+				<pre><code class="language-bash"><span style="color: #000000">    npm i @sergdudko/objectstream --save</span>
+</code></pre>
 				<a href="#docs" id="docs" style="color: inherit; text-decoration: none;">
 					<h2>DOCS</h2>
 				</a>
@@ -109,61 +104,62 @@
 				<a href="#use" id="use" style="color: inherit; text-decoration: none;">
 					<h2>USE</h2>
 				</a>
-				<pre><code class="language-js">    <span class="hljs-comment">// REQUIRE OR IMPORT CLASS</span>
+				<pre><code class="language-js"><span style="color: #000000">    </span><span style="color: #008000">// REQUIRE OR IMPORT CLASS</span>
 
-    <span class="hljs-keyword">const</span> Stringifer = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@sergdudko/objectstream"</span>).Stringifer
-    <span class="hljs-keyword">const</span> Parser = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@sergdudko/objectstream"</span>).Parser
-    <span class="hljs-comment">// or use import</span>
-    <span class="hljs-keyword">import</span> { Stringifer, Parser } <span class="hljs-keyword">from</span> <span class="hljs-string">"@sergdudko/objectstream"</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Stringifer</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;@sergdudko/objectstream&quot;</span><span style="color: #000000">).</span><span style="color: #001080">Stringifer</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Parser</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;@sergdudko/objectstream&quot;</span><span style="color: #000000">).</span><span style="color: #001080">Parser</span>
+<span style="color: #000000">    </span><span style="color: #008000">// or use import</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Stringifer</span><span style="color: #000000">, </span><span style="color: #001080">Parser</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@sergdudko/objectstream&quot;</span>
 
-    <span class="hljs-comment">// CREATE STREAM</span>
+<span style="color: #000000">    </span><span style="color: #008000">// CREATE STREAM</span>
 
-    <span class="hljs-keyword">const</span> firstSeparator = <span class="hljs-string">"["</span>
-    <span class="hljs-keyword">const</span> middleSeparator = <span class="hljs-string">","</span>
-    <span class="hljs-keyword">const</span> endSeparator = <span class="hljs-string">"]"</span>
-    <span class="hljs-keyword">const</span> stringToObject = <span class="hljs-keyword">new</span> Parser(firstSeparator, middleSeparator, endSeparator)
-    <span class="hljs-keyword">const</span> objectToString = <span class="hljs-keyword">new</span> Stringifer(firstSeparator, middleSeparator, endSeparator)
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">firstSeparator</span><span style="color: #000000"> = </span><span style="color: #A31515">&quot;[&quot;</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">middleSeparator</span><span style="color: #000000"> = </span><span style="color: #A31515">&quot;,&quot;</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">endSeparator</span><span style="color: #000000"> = </span><span style="color: #A31515">&quot;]&quot;</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">stringToObject</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Parser</span><span style="color: #000000">(</span><span style="color: #001080">firstSeparator</span><span style="color: #000000">, </span><span style="color: #001080">middleSeparator</span><span style="color: #000000">, </span><span style="color: #001080">endSeparator</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">objectToString</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Stringifer</span><span style="color: #000000">(</span><span style="color: #001080">firstSeparator</span><span style="color: #000000">, </span><span style="color: #001080">middleSeparator</span><span style="color: #000000">, </span><span style="color: #001080">endSeparator</span><span style="color: #000000">)</span>
 
-    <span class="hljs-comment">// EVENTS</span>
+<span style="color: #000000">    </span><span style="color: #008000">// EVENTS</span>
 
-    stringToObject.on(<span class="hljs-string">"data"</span>, (e) =&gt; {
-        <span class="hljs-comment">// e - is Object</span>
-    })
-    stringToObject.on(<span class="hljs-string">"error"</span>, (d) =&gt; {
-        <span class="hljs-comment">// e - Array of Error</span>
-    })
-    stringToObject.on(<span class="hljs-string">"end"</span>, () =&gt; {
-        <span class="hljs-comment">// end event</span>
-    })
-    stringToObject.on(<span class="hljs-string">"finish"</span>, () =&gt; {
-        <span class="hljs-comment">// finish event</span>
-    })
-    objectToString.on(<span class="hljs-string">"data"</span>, (e) =&gt; {
-        <span class="hljs-comment">// e - is Buffer (deault, if you need a string use setEncoding)</span>
-    })
-    objectToString.on(<span class="hljs-string">"error"</span>, (d) =&gt; {
-        <span class="hljs-comment">// e - Array of Error</span>
-    })
-    objectToString.on(<span class="hljs-string">"end"</span>, () =&gt; {
-        <span class="hljs-comment">// end event</span>
-    })
-    objectToString.on(<span class="hljs-string">"finish"</span>, () =&gt; {
-        <span class="hljs-comment">// finish event</span>
-    })
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;data&quot;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// e - is Object</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;error&quot;</span><span style="color: #000000">, (</span><span style="color: #001080">d</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// e - Array of Error</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;end&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// end event</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;finish&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// finish event</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;data&quot;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// e - is Buffer (deault, if you need a string use setEncoding)</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;error&quot;</span><span style="color: #000000">, (</span><span style="color: #001080">d</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// e - Array of Error</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;end&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// end event</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;finish&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #008000">// finish event</span>
+<span style="color: #000000">    })</span>
 
-    <span class="hljs-comment">// CHANGE ENCODING</span>
+<span style="color: #000000">    </span><span style="color: #008000">// CHANGE ENCODING</span>
 
-    stringToObject.setEncoding(<span class="hljs-string">"latin1"</span>)
-    objectToString.setEncoding(<span class="hljs-string">"latin1"</span>)
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">setEncoding</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;latin1&quot;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">setEncoding</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;latin1&quot;</span><span style="color: #000000">)</span>
 
-    <span class="hljs-comment">// WRITE DATA (example for utf8)</span>
+<span style="color: #000000">    </span><span style="color: #008000">// WRITE DATA (example for utf8)</span>
 
-    stringToObject.write(<span class="hljs-string">"{\"boolean\":true}"</span>)
-    objectToString.write({<span class="hljs-attr">boolean</span>: <span class="hljs-literal">true</span>})
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">write</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;{</span><span style="color: #EE0000">\&quot;</span><span style="color: #A31515">boolean</span><span style="color: #EE0000">\&quot;</span><span style="color: #A31515">:true}&quot;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #001080">objectToString</span><span style="color: #000000">.</span><span style="color: #795E26">write</span><span style="color: #000000">({</span><span style="color: #001080">boolean:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">})</span>
 
-    <span class="hljs-comment">// PIPE</span>
+<span style="color: #000000">    </span><span style="color: #008000">// PIPE</span>
 
-    stringToObject.pipe(objectToString)</code></pre>
+<span style="color: #000000">    </span><span style="color: #001080">stringToObject</span><span style="color: #000000">.</span><span style="color: #795E26">pipe</span><span style="color: #000000">(</span><span style="color: #001080">objectToString</span><span style="color: #000000">)</span>
+</code></pre>
 				<a href="#warning" id="warning" style="color: inherit; text-decoration: none;">
 					<h2>WARNING</h2>
 				</a>
@@ -181,17 +177,20 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_classes_parser_.html">&quot;classes/<wbr>Parser&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/classes_parser.html">classes/<wbr>Parser</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_classes_stringifer_.html">&quot;classes/<wbr>Stringifer&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/classes_stringifer.html">classes/<wbr>Stringifer</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_utils_global_.html">&quot;utils/global&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/sergdudko_objectstream.html">sergdudko/objectstream</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils_global.html">utils/global</a>
 					</li>
 				</ul>
 			</nav>
@@ -202,71 +201,17 @@
 		</div>
 	</div>
 </div>
-<footer class="with-border-bottom">
+<footer>
 	<div class="container">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

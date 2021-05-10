@@ -1,3 +1,8 @@
+# 2.0.6 / 2021-05-10
+
+## :tada: Enhancements
+- Updated development dependencies, blocked incorrect @types/node packages (version 15 and higher).
+
 # 2.0.5 / 2020-06-10
 
 ## :tada: Enhancements

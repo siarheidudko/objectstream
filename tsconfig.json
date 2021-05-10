@@ -12,5 +12,12 @@
     "compileOnSave": true,
     "include": [
       "src"
-    ]
+    ],
+    "typedocOptions": {
+      "out": "./docs/",
+      "theme": "default",
+      "name": "ObjectStream",
+      "includeVersion": true,
+      "hideGenerator": true
+    }
   }
