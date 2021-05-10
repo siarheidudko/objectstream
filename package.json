@@ -5,10 +5,11 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "mocha test/**/*.test.js",
-    "doc": "typedoc src&&echo \"\">./docs/.nojekyll",
-    "lint": "eslint -c .eslintrc.js --ext .ts src",
-    "build": "rm -rf lib && tsc --declaration",
+    "test": "node_modules/.bin/mocha test/**/*.test.js",
+    "cov": "node_modules/.bin/nyc npm run test",
+    "doc": "node_modules/.bin/typedoc src&&echo \"\">./docs/.nojekyll",
+    "lint": "node_modules/.bin/eslint -c .eslintrc.js --ext .ts src",
+    "build": "rm -rf lib && node_modules/.bin/tsc --declaration",
     "testv10": "docker run --name=objectstream-node10 --rm -v $PWD:/app node10:1.0.0 nyc npm run test",
     "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
     "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",
@@ -42,6 +43,7 @@
     "eslint-plugin-import": "^2.22.1",
     "lodash": "^4.17.21",
     "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
     "typescript": "^4.2.4"
   },
   "engines": {
