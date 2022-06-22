@@ -1,8 +1,13 @@
-# 3.1.0 / 2022-06-22
+# 3.1.1 / 2022-06-22
 
 ## :tada: Enhancements
 
 - Updated code style
+
+# 3.1.0 / 2022-06-22
+
+## :tada: Enhancements
+
 - Updated libraries
 - Fixes for node 18 and new versions of libraries
 
