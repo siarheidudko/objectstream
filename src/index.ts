@@ -8,16 +8,16 @@
  * @requires stream
  */
 
-import { Parser } from "./classes/Parser"
-import { Stringifer } from "./classes/Stringifer"
+import { Parser } from "./classes/Parser";
+import { Stringifer } from "./classes/Stringifer";
 
-export = module.exports = {
-	/**
-	 * Object to String stream
-	 */
-	Stringifer,
-	/**
-	 * String to Object stream
-	 */
-	Parser
-}
+export = (module.exports = {
+  /**
+   * Object to String stream
+   */
+  Stringifer,
+  /**
+   * String to Object stream
+   */
+  Parser,
+});
