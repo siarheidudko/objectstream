@@ -83,7 +83,11 @@ export class Stringifer extends Transform {
 	 * @param callback - callback function
 	 */
     // eslint-disable-next-line
-	public _transform(object: {[key: string]: any}|null|undefined, encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = this.__encoding, callback: Function = () => { return }) {
+	public _transform(
+		object: {[key: string]: any}|null|undefined,
+		// eslint-disable-next-line
+		encoding = this.__encoding as BufferEncoding, 
+		callback: Function = () => { return }) {
 		if(typeof(object) === "undefined"){
 			callback()
 			return

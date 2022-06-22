@@ -146,7 +146,11 @@ export class Parser extends Transform {
 	 * @param encoding - stream encoding
 	 * @param callback - callback function
 	 */
-	public _transform(string: string|Buffer|null|undefined, encoding: "utf8" | "ascii" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" = this.__encoding, callback: Function = () => { return }) {
+	public _transform(
+		string: string|Buffer|null|undefined,
+		// eslint-disable-next-line
+		encoding = this.__encoding as BufferEncoding, 
+		callback: Function = () => { return }) {
 		if(typeof(string) === "undefined"){
 			callback()
 			return
@@ -219,7 +223,7 @@ export class Parser extends Transform {
 							new Error("Validation failed, incoming data type is not pure Object!")
 						)
 					}
-				} catch(err){
+				} catch(err: any){
 					this.__clear()
 					errors.push(err)
 				}
