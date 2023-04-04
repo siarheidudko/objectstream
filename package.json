@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -18,6 +18,20 @@
     "testv18": "docker run --name=objectstream-node18 --rm -v $PWD:/app node18:1.0.0 nyc npm run test"
   },
   "author": "Siarhei Dudko",
+  "funding": [
+    {
+      "type": "buymeacoffee",
+      "url": "https://www.buymeacoffee.com/dudko.dev"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/dudkodev"
+    },
+    {
+      "type": "patreon",
+      "url": "https://patreon.com/dudko_dev"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
