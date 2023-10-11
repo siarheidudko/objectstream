@@ -1,3 +1,15 @@
+# 3.1.3 / 2023-10-11
+
+## :tada: Enhancements
+
+- Update dev dependencies
+
+# 3.1.2 / 2023-04-04
+
+## :tada: Enhancements
+
+- Add funding file
+
 # 3.1.1 / 2022-06-22
 
 ## :tada: Enhancements
