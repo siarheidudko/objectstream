@@ -11,13 +11,13 @@ jobs:
       NODE_VERSION: 20
     steps:
       - name: Сheckout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -36,7 +36,7 @@ jobs:
       - name: Run builder
         run: npm run build
       - name: Archiving lib directory
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lib
           path: ${{ github.workspace }}/lib
@@ -49,18 +49,18 @@ jobs:
         node-version: [12.x, 14.x, 16.x, 18.x, 20.x]
     steps:
       - name: Сheckout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Unarchiving lib directory
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: lib
           path: ${{ github.workspace }}/lib
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
