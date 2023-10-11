@@ -10,12 +10,13 @@
     "doc": "node_modules/.bin/typedoc --entryPointStrategy expand src&&echo \"\">./docs/.nojekyll",
     "lint": "node_modules/.bin/eslint -c .eslintrc.js --ext .ts src",
     "build": "rm -rf lib && node_modules/.bin/tsc --declaration",
-    "update": "eval \"$(node -e 'const t = require(`./package.json`);const ignore = require(`./ignoreUpdatesModules.json`);console.log(`npm i ${(Object.keys(t.dependencies).filter((e)=>ignore.base.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save&&npm i ${(Object.keys(t.devDependencies).filter((e)=>ignore.dev.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save-dev`);')\"",
+    "update": "eval \"$(node -e 'const t = require(`./package.json`);const ignore = require(`./ignoreUpdatesModules.json`);console.log(`npm i ${(Object.keys(t.dependencies || {}).filter((e)=>ignore.base.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save&&npm i ${(Object.keys(t.devDependencies || {}).filter((e)=>ignore.dev.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save-dev`);')\"",
     "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
     "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",
     "testv14": "docker run --name=objectstream-node14 --rm -v $PWD:/app node14:1.0.0 nyc npm run test",
     "testv16": "docker run --name=objectstream-node16 --rm -v $PWD:/app node16:1.0.0 nyc npm run test",
-    "testv18": "docker run --name=objectstream-node18 --rm -v $PWD:/app node18:1.0.0 nyc npm run test"
+    "testv18": "docker run --name=objectstream-node18 --rm -v $PWD:/app node18:1.0.0 nyc npm run test",
+    "testv20": "docker run --name=objectstream-node20 --rm -v $PWD:/app node20:1.0.0 nyc npm run test"
   },
   "author": "Siarhei Dudko",
   "funding": [
@@ -51,17 +52,17 @@
   ],
   "homepage": "https://siarheidudko.github.io/objectstream/index.html",
   "devDependencies": {
-    "@types/node": "^16.11.41",
-    "@typescript-eslint/eslint-plugin": "^5.29.0",
-    "@typescript-eslint/parser": "^5.29.0",
-    "eslint": "^8.18.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
+    "@types/node": "^20.8.4",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
     "lodash": "^4.17.21",
-    "mocha": "^10.0.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "typedoc": "^0.22.17",
-    "typescript": "^4.7.4"
+    "typedoc": "^0.25.2",
+    "typescript": "^5.2.2"
   },
   "engines": {
     "node": ">=10"

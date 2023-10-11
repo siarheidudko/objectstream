@@ -39,7 +39,7 @@ export class Parser extends Transform {
     this.__separators = {
       start: Buffer.from(start ? start : "", "utf8")[0],
       middle: Buffer.from(middle ? middle : "", "utf8")[0],
-      end: Buffer.from(end ? end : "", "utf8")[0],
+      end: Buffer.from(end ? end : "", "utf8")[0]
     };
     this.__clear();
     this.__bytesRead = 0;
@@ -136,9 +136,9 @@ export class Parser extends Transform {
       errors.push(
         new Error(
           "Unexpected token " +
-            buffer.slice(s, s + 1).toString(this.__encoding) +
-            " in JSON at position " +
-            (this.__bytesRead + s)
+          buffer.slice(s, s + 1).toString(this.__encoding) +
+          " in JSON at position " +
+          (this.__bytesRead + s)
         )
       );
     }
@@ -175,9 +175,9 @@ export class Parser extends Transform {
       callback([
         new Error(
           "Incoming data type is " +
-            typeof _buffer +
-            ", require data type is String!"
-        ),
+          typeof _buffer +
+          ", require data type is String!"
+        )
       ]);
       return;
     }
