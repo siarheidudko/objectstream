@@ -1,6 +1,6 @@
 ﻿# @sergdudko/objectstream
 
-Creates a stream to convert json from string or convert json to drain. The stream is based on the incoming object stream.
+Revolutionize Your JSON Handling with Streamlined Efficiency: Seamlessly Convert JSON from String or Transform JSON to Drain with this Powerful Stream Creation Tool. Harness the Power of Object Streams for Swift and Seamless Data Processing!
 
 [![npm](https://img.shields.io/npm/v/@sergdudko/objectstream.svg)](https://www.npmjs.com/package/@sergdudko/objectstream)
 [![npm](https://img.shields.io/npm/dy/@sergdudko/objectstream.svg)](https://www.npmjs.com/package/@sergdudko/objectstream)
@@ -13,7 +13,7 @@ Creates a stream to convert json from string or convert json to drain. The strea
 ## INSTALL
 
 ```bash
-	npm i @sergdudko/objectstream --save
+ npm i @sergdudko/objectstream --save
 ```
 
 ## DOCS

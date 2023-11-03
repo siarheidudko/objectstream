@@ -1,0 +1,92 @@
+name: Autoupdate
+on:
+  schedule:
+    - cron: "0 1 * * *"
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.ref }}"
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      updated: ${{ steps.autoupdate.outputs.updated }}
+      version: ${{ steps.autoupdate.outputs.version }}
+    steps:
+      - name: Сheckout repo
+        id: checkout_repo
+        uses: actions/checkout@v3
+        with:
+          path: "tmp"
+          ref: "master"
+      - name: Autoupdate
+        id: autoupdate
+        uses: siarheidudko/autoupdater@v3
+        with:
+          author-email: "slavianich@gmail.com"
+          author-name: "Siarhei Dudko"
+          working-directory: ${{ github.workspace }}/tmp
+          ref: ${{ github.repository }}
+          branch: "master"
+          builds-and-checks: |
+            npm run lint
+            npm run build
+            npm test
+          debug: "true"
+          ignore-packages: |
+            @types/node
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NODE_VERSION: 20
+      VERSION: ${{ needs.update.outputs.version }}
+    needs: [update]
+    if: ${{ needs.update.outputs.updated == 'true' }}
+    steps:
+      - name: Сheckout repo
+        id: checkout_repo
+        uses: actions/checkout@v3
+        with:
+          ref: "master"
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        id: setup_node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+      - name: Cache node modules
+        id: use_cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        id: install_ci
+        run: npm ci
+      - name: Build package
+        id: build_package
+        run: npm run build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          body: |
+            see [CHANGELOG.md](https://github.com/siarheidudko/objectstream/blob/master/CHANGELOG.md)
+          draft: false
+          prerelease: false
+      - name: Publish package to NPM
+        id: npm_publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
