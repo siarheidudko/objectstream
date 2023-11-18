@@ -1,3 +1,8 @@
+# 3.1.7 / 2023-11-18
+
+### :tada: Enhancements
+- Updated dependencies: eslint
+
 # 3.1.6 / 2023-11-14
 
 ### :tada: Enhancements
