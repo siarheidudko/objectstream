@@ -53,8 +53,8 @@
   "homepage": "https://siarheidudko.github.io/objectstream/index.html",
   "devDependencies": {
     "@types/node": "^20.8.4",
-    "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@typescript-eslint/parser": "^6.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
@@ -62,7 +62,7 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "typedoc": "^0.25.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "engines": {
     "node": ">=10"
