@@ -95,10 +95,6 @@ objectToString.write({ boolean: true });
 stringToObject.pipe(objectToString);
 ```
 
-## WARNING
-
-Streams behave unexpectedly when processing errors in versions node 14 and later. In these versions, you need to make sure that in case of an error the stream will be destroyed or the processing of the stream will continue.
-
 ## EXAMPLE
 
 [see test directory](https://github.com/siarheidudko/objectstream/tree/master/test)
