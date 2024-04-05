@@ -62,7 +62,7 @@
     "mocha": "^10.4.0",
     "nyc": "^15.1.0",
     "typedoc": "^0.25.12",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   },
   "engines": {
     "node": ">=10"
