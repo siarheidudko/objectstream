@@ -1,5 +1,6 @@
 import { Transform } from "stream";
 import { validator } from "../utils/global";
+import { UniversalGenericFunction } from "../utils/genericFunction";
 
 /**
  * @class Parser
@@ -39,7 +40,7 @@ export class Parser extends Transform {
     this.__separators = {
       start: Buffer.from(start ? start : "", "utf8")[0],
       middle: Buffer.from(middle ? middle : "", "utf8")[0],
-      end: Buffer.from(end ? end : "", "utf8")[0]
+      end: Buffer.from(end ? end : "", "utf8")[0],
     };
     this.__clear();
     this.__bytesRead = 0;
@@ -136,9 +137,9 @@ export class Parser extends Transform {
       errors.push(
         new Error(
           "Unexpected token " +
-          buffer.slice(s, s + 1).toString(this.__encoding) +
-          " in JSON at position " +
-          (this.__bytesRead + s)
+            buffer.slice(s, s + 1).toString(this.__encoding) +
+            " in JSON at position " +
+            (this.__bytesRead + s)
         )
       );
     }
@@ -155,7 +156,7 @@ export class Parser extends Transform {
     string: string | Buffer | null | undefined,
     // eslint-disable-next-line
     encoding = this.__encoding as BufferEncoding,
-    callback: Function = () => {
+    callback: UniversalGenericFunction = () => {
       return;
     }
   ) {
@@ -175,9 +176,9 @@ export class Parser extends Transform {
       callback([
         new Error(
           "Incoming data type is " +
-          typeof _buffer +
-          ", require data type is String!"
-        )
+            typeof _buffer +
+            ", require data type is String!"
+        ),
       ]);
       return;
     }
@@ -189,11 +190,11 @@ export class Parser extends Transform {
     for (let s = 0; s < _buffer.length; s++) {
       switch (_buffer[s]) {
         case 0x7b:
-          this.__leftBrace++;
+          this.__leftBrace += 1;
           this.__handler(_buffer, s, errors);
           break;
         case 0x7d:
-          this.__rightBrace++;
+          this.__rightBrace += 1;
           this.__handler(_buffer, s, errors);
           break;
         case 0x08:
@@ -257,7 +258,7 @@ export class Parser extends Transform {
    * @param callback - callback function
    */
   public _flush(
-    callback: Function = () => {
+    callback: UniversalGenericFunction = () => {
       return;
     }
   ) {
@@ -271,7 +272,7 @@ export class Parser extends Transform {
    * @param callback - callback function
    */
   public _final(
-    callback: Function = () => {
+    callback: UniversalGenericFunction = () => {
       return;
     }
   ) {

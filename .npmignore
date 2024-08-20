@@ -6,6 +6,7 @@ object.json
 src
 test
 .eslintrc.js
+eslint.config.mjs
 .gitignore
 .npmignore
 Dockerfile

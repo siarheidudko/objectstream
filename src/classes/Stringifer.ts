@@ -1,5 +1,6 @@
 import { Transform } from "stream";
 import { validator } from "../utils/global";
+import { UniversalGenericFunction } from "../utils/genericFunction";
 
 /**
  * @class Stringifer
@@ -39,7 +40,7 @@ export class Stringifer extends Transform {
     this.__separators = {
       start: Buffer.from(start ? start : "", "utf8"),
       middle: Buffer.from(middle ? middle : "", "utf8"),
-      end: Buffer.from(end ? end : "", "utf8")
+      end: Buffer.from(end ? end : "", "utf8"),
     };
     this.__isString = false;
     this.__bytesWrite = 0;
@@ -82,12 +83,11 @@ export class Stringifer extends Transform {
    * @param encoding - stream encoding
    * @param callback - callback function
    */
-  // eslint-disable-next-line
   public _transform(
     object: { [key: string]: any } | null | undefined,
     // eslint-disable-next-line
     encoding = this.__encoding as BufferEncoding,
-    callback: Function = () => {
+    callback: UniversalGenericFunction = () => {
       return;
     }
   ) {
@@ -108,7 +108,7 @@ export class Stringifer extends Transform {
             callback([
               new Error(
                 "Validation failed, incoming data type is not pure Object!"
-              )
+              ),
             ]);
             return;
           }
@@ -134,9 +134,9 @@ export class Stringifer extends Transform {
         callback([
           new Error(
             "Incoming data type is " +
-            typeof object +
-            ", require data type is pure Object!"
-          )
+              typeof object +
+              ", require data type is pure Object!"
+          ),
         ]);
         return;
     }
@@ -168,7 +168,7 @@ export class Stringifer extends Transform {
     if (this.__bytesWrite === 0) {
       const _buffer: Buffer = Buffer.concat([
         this.__separators.start,
-        this.__separators.end
+        this.__separators.end,
       ]);
       if (this.__isString) this.push(_buffer.toString(this.__encoding));
       else this.push(_buffer, this.__encoding);
