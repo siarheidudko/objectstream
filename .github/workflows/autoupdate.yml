@@ -35,7 +35,6 @@ jobs:
           debug: "true"
           ignore-packages: |
             @types/node
-            eslint
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
