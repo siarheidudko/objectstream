@@ -1,3 +1,9 @@
+# 3.2.0 / 2024-08-20
+
+### :tada: Enhancements
+
+- Removed test libraries
+
 # 3.1.29 / 2024-08-20
 
 ### :tada: Enhancements

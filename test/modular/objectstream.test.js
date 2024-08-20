@@ -1,6 +1,6 @@
 "use strict";
-require("mocha");
-const Lodash = require("lodash");
+const { describe, it } = require("node:test");
+const { deepEqual } = require("node:assert");
 const ObjectStream = require("../../lib/index.js");
 
 describe("Stringifer invalid arguments:", function () {
@@ -79,8 +79,8 @@ describe("Set encoding:", function () {
     parser.setEncoding("latin1");
     const p = new Promise((res, rej) => {
       parser.once("data", (data) => {
-        if (Lodash.isEqual(data, { w: "тестовое сообщениие" })) res();
-        else rej("Not Equal");
+        deepEqual(data, { w: "тестовое сообщениие" }, "Not Equal");
+        res();
       });
     });
     parser.write(

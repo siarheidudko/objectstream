@@ -1,6 +1,5 @@
 "use strict";
-require("mocha");
-const Lodash = require("lodash");
+const { describe, it } = require("node:test");
 const ObjectStream = require("../../lib/index.js");
 const object = require("../utils/object.json");
 
@@ -9,7 +8,6 @@ const start = "[",
   end = "]";
 
 describe("Performance:", function () {
-  this.timeout(30000);
   it("performance", async () => {
     let nstring = start;
     let rstring = "";

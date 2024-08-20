@@ -1,6 +1,5 @@
 "use strict";
-require("mocha");
-const Lodash = require("lodash");
+const { describe, it } = require("node:test");
 const ObjectStream = require("../../lib/index.js");
 
 const start = "[",
@@ -28,7 +27,6 @@ const string = JSON.stringify(object);
 const buffer = Buffer.from(string);
 
 describe("Pipe one byte:", function () {
-  this.timeout(60000);
   const encodings = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
   const iterations = 10000;
   for (const encoding of encodings) {
@@ -138,7 +136,6 @@ describe("Pipe one byte:", function () {
 });
 
 describe("Pipe with different encodings:", function () {
-  this.timeout(60000);
   const encodings = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
   const iterations = 10000;
   for (const encoding of encodings) {

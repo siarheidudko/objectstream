@@ -1,7 +1,7 @@
 "use strict";
-require("mocha");
-const Lodash = require("lodash");
+const { describe, it } = require("node:test");
 const ObjectStream = require("../../lib/index.js");
+const { deepEqual } = require("node:assert");
 
 describe("Parser: Invalid data type:", function () {
   it('err[0].message === "Incoming data type is number, require data type is String!"', async () => {
@@ -71,8 +71,8 @@ describe("Parser: Valid data type:", function () {
     const parser = new ObjectStream.Parser();
     const p = new Promise((res, rej) => {
       parser.once("data", (data) => {
-        if (Lodash.isEqual(data, { w: 1 })) res();
-        else rej("Not Equal");
+        deepEqual(data, { w: 1 }, "Not Equal");
+        res();
       });
     });
     parser.write('{"w":1}');
@@ -83,9 +83,8 @@ describe("Parser: Valid data type:", function () {
     const parser = new ObjectStream.Parser();
     const p = new Promise((res, rej) => {
       parser.once("data", (data) => {
-        if (Lodash.isEqual(data, { w: 1, c: { k: true, l: "t", d: null } }))
-          res();
-        else rej("Not Equal");
+        deepEqual(data, { w: 1, c: { k: true, l: "t", d: null } }, "Not Equal");
+        res();
       });
     });
     parser.write('{"w":1,"c":{"k":true,"l":"t","d":null}}');
@@ -107,11 +106,12 @@ describe("Parser: Valid data type:", function () {
     const parser = new ObjectStream.Parser();
     const p = new Promise((res, rej) => {
       parser.once("data", function (data) {
-        if (
-          Lodash.isEqual(data, { w: 1, c: { k: true, l: ["1", 2, "4", true] } })
-        )
-          res();
-        else rej("Not Equal");
+        deepEqual(
+          data,
+          { w: 1, c: { k: true, l: ["1", 2, "4", true] } },
+          "Not Equal"
+        );
+        res();
       });
     });
     parser.write('{"w":1,"c":{"k":true,"l":["1",2,"4",true]}}');
@@ -122,8 +122,9 @@ describe("Parser: Valid data type:", function () {
     const parser = new ObjectStream.Parser();
     const p = new Promise((res, rej) => {
       parser.once("data", (data) => {
-        if (
-          Lodash.isEqual(data, {
+        deepEqual(
+          data,
+          {
             number: 1234567890,
             string_en: "abcdefghijklmnopqrstuvwxyz",
             string_ru: "абвгдеёжзийклмнопртуфхцчшщъыьэюя",
@@ -131,10 +132,10 @@ describe("Parser: Valid data type:", function () {
             bool: true,
             array: ["a", 1, true],
             object: { a: "a", b: 1, c: true },
-          })
-        )
-          res();
-        else rej("Not Equal");
+          },
+          "Not Equal"
+        );
+        res();
       });
     });
     parser.write(

@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "node_modules/.bin/mocha test/**/*.test.js",
+    "test": "node --test test/**/*.test.js",
     "cov": "node_modules/.bin/nyc npm run test",
     "doc": "node_modules/.bin/typedoc --entryPointStrategy expand src&&echo \"\">./docs/.nojekyll",
     "lint": "node_modules/.bin/eslint src/**/*.ts",
@@ -55,9 +55,7 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/node": "^22.4.1",
-    "chai": "^5.1.1",
     "eslint": "^9.9.0",
-    "mocha": "^10.7.3",
     "nyc": "^17.0.0",
     "prettier": "^3.3.3",
     "sinon": "^18.0.0",

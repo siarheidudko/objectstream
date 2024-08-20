@@ -1,5 +1,5 @@
 "use strict";
-require("mocha");
+const { describe, it } = require("node:test");
 const ObjectStream = require("../../lib/index.js");
 
 describe("Parser Events:", function () {
