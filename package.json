@@ -53,9 +53,9 @@
   ],
   "homepage": "https://siarheidudko.github.io/objectstream/index.html",
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
+    "@eslint/js": "^9.10.0",
     "@types/node": "^22.4.1",
-    "eslint": "^9.9.1",
+    "eslint": "^9.10.0",
     "nyc": "^17.0.0",
     "prettier": "^3.3.3",
     "typedoc": "^0.26.6",
