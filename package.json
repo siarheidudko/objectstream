@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "3.2.9",
+  "version": "3.2.10",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
