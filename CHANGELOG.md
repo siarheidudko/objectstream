@@ -1,3 +1,8 @@
+# 3.2.14 / 2024-10-09
+
+### :tada: Enhancements
+- Updated dependencies: typescript
+
 # 3.2.13 / 2024-10-08
 
 ### :tada: Enhancements
