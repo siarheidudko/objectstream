@@ -1,3 +1,8 @@
+# 3.2.23 / 2024-11-02
+
+### :tada: Enhancements
+- Updated dependencies: @eslint/js, eslint, typedoc
+
 # 3.2.22 / 2024-10-30
 
 ### :tada: Enhancements
