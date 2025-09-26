@@ -1,28 +1,29 @@
-"use strict";
-const { describe, it } = require("node:test");
-const { deepEqual } = require("node:assert");
-const ObjectStream = require("../../dist/index.js");
+import { describe, it } from "node:test";
+import { deepEqual } from "node:assert";
+import objectstream, { Parser, Stringifer } from "../../src/index";
 
 describe("Stringifer invalid arguments:", function () {
   it("Invalid start separator", async () => {
     try {
-      new ObjectStream.Stringifer("б", "", "");
+      new Stringifer("б", "", "");
     } catch (err) {
       return;
     }
     throw new Error("error");
   });
+
   it("Invalid middle separator", async () => {
     try {
-      new ObjectStream.Stringifer("", "б", "");
+      new Stringifer("", "б", "");
     } catch (err) {
       return;
     }
     throw new Error("error");
   });
+
   it("Invalid end separator", async () => {
     try {
-      new ObjectStream.Stringifer("", "", "б");
+      new Stringifer("", "", "б");
     } catch (err) {
       return;
     }
@@ -33,23 +34,25 @@ describe("Stringifer invalid arguments:", function () {
 describe("Parser invalid arguments:", function () {
   it("Invalid start separator", async () => {
     try {
-      new ObjectStream.Parser("б", "", "");
+      new Parser("б", "", "");
     } catch (err) {
       return;
     }
     throw new Error("error");
   });
+
   it("Invalid middle separator", async () => {
     try {
-      new ObjectStream.Parser("", "б", "");
+      new Parser("", "б", "");
     } catch (err) {
       return;
     }
     throw new Error("error");
   });
+
   it("Invalid end separator", async () => {
     try {
-      new ObjectStream.Parser("", "", "б");
+      new Parser("", "", "б");
     } catch (err) {
       return;
     }
@@ -59,10 +62,10 @@ describe("Parser invalid arguments:", function () {
 
 describe("Set encoding:", function () {
   it("Stringifer", async () => {
-    const stringifer = new ObjectStream.Stringifer();
+    const stringifer = new Stringifer();
     stringifer.setEncoding("latin1");
-    const p = new Promise((res, rej) => {
-      stringifer.once("data", (data) => {
+    const p = new Promise<void>((res, rej) => {
+      stringifer.once("data", (data: string) => {
         const string = Buffer.from('{"w":"тестовое сообщение"}').toString(
           "latin1"
         );
@@ -74,11 +77,12 @@ describe("Set encoding:", function () {
     await p;
     stringifer.end();
   });
+
   it("Parser", async () => {
-    const parser = new ObjectStream.Parser();
+    const parser = new Parser();
     parser.setEncoding("latin1");
-    const p = new Promise((res, rej) => {
-      parser.once("data", (data) => {
+    const p = new Promise<void>((res, rej) => {
+      parser.once("data", (data: { w: string }) => {
         deepEqual(data, { w: "тестовое сообщениие" }, "Not Equal");
         res();
       });
@@ -88,5 +92,24 @@ describe("Set encoding:", function () {
     );
     await p;
     parser.end();
+  });
+});
+
+describe("Default export compatibility:", function () {
+  it("should work with default export", async () => {
+    const stringifer = new objectstream.Stringifer();
+    const parser = new objectstream.Parser();
+
+    const p = new Promise<void>((res, rej) => {
+      parser.once("data", (data: { test: boolean }) => {
+        deepEqual(data, { test: true }, "Not Equal");
+        res();
+      });
+    });
+
+    parser.write('{"test":true}');
+    await p;
+    parser.end();
+    stringifer.end();
   });
 });

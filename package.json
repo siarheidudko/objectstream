@@ -1,15 +1,29 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "3.2.27",
+  "version": "4.0.0",
   "description": "Creates a stream to convert json from string or convert json to string.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "scripts": {
-    "test": "node --test test/**/*.test.js",
+    "test": "node --test --import tsx test/**/*.test.ts",
     "cov": "node_modules/.bin/nyc npm run test",
     "lint": "node_modules/.bin/eslint src/**/*.ts",
     "prebuild": "npm run lint",
-    "build": "rm -rf dist && node_modules/.bin/tsc --declaration",
+    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types && npm run build:cjs-package",
+    "build:clean": "rm -rf dist",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:cjs-package": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
     "update": "eval \"$(node -e 'const t = require(`./package.json`);const ignore = require(`./ignoreUpdatesModules.json`);console.log(`npm i ${(Object.keys(t.dependencies || {}).filter((e)=>ignore.base.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save&&npm i ${(Object.keys(t.devDependencies || {}).filter((e)=>ignore.dev.indexOf(e) === -1).map((e)=>(`${e}@latest`)).join(` `))} --save-dev`);')\"",
     "testv12": "docker run --name=objectstream-node12 --rm -v $PWD:/app node12:1.0.0 nyc npm run test",
     "testv13": "docker run --name=objectstream-node13 --rm -v $PWD:/app node13:1.0.0 nyc npm run test",
@@ -18,6 +32,13 @@
     "testv18": "docker run --name=objectstream-node18 --rm -v $PWD:/app node18:1.0.0 nyc npm run test",
     "testv20": "docker run --name=objectstream-node20 --rm -v $PWD:/app node20:1.0.0 nyc npm run test"
   },
+  "files": [
+    "dist/esm/**/*.js",
+    "dist/cjs/**/*.js",
+    "dist/types/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "author": {
     "name": "Siarhei Dudko",
     "email": "siarhei@dudko.dev",
@@ -58,13 +79,14 @@
     "jsonstringifer",
     "docstream"
   ],
-  "homepage": "https://siarheidudko.github.io/objectstream/index.html",
+  "homepage": "https://github.com/siarheidudko/objectstream",
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.5.2",
     "eslint": "^9.36.0",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1"
   },

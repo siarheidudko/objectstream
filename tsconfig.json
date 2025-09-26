@@ -1,30 +1,24 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "allowJs": false,
     "skipLibCheck": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "target": "ES2021",
+    "target": "ES2020",
     "lib": ["DOM", "ES2020", "ES2021", "ES2022"],
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": false,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "declaration": false
   },
   "compileOnSave": true,
-  "include": ["src"],
-  "typedocOptions": {
-    "out": "./docs/",
-    "theme": "default",
-    "name": "ObjectStream",
-    "includeVersion": true,
-    "hideGenerator": true
-  }
+  "include": ["src"]
 }
