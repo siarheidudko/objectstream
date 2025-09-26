@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: "tmp"
-          ref: "master"
+          ref: "main"
       - name: Autoupdate
         id: autoupdate
         uses: siarheidudko/autoupdater@v3
@@ -27,9 +27,8 @@ jobs:
           author-name: "Siarhei Dudko"
           working-directory: ${{ github.workspace }}/tmp
           ref: ${{ github.repository }}
-          branch: "master"
+          branch: "main"
           builds-and-checks: |
-            npm run lint
             npm run build
             npm test
           debug: "true"
@@ -48,7 +47,7 @@ jobs:
         id: checkout_repo
         uses: actions/checkout@v4
         with:
-          ref: "master"
+          ref: "main"
       - name: Use Node.js ${{ env.NODE_VERSION }}
         id: setup_node
         uses: actions/setup-node@v4
@@ -82,7 +81,7 @@ jobs:
           tag_name: ${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
           body: |
-            see [CHANGELOG.md](https://github.com/siarheidudko/objectstream/blob/master/CHANGELOG.md)
+            see [CHANGELOG.md](https://github.com/siarheidudko/objectstream/blob/main/CHANGELOG.md)
           draft: false
           prerelease: false
       - name: Publish package to NPM

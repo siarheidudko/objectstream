@@ -97,7 +97,7 @@ stringToObject.pipe(objectToString);
 
 ## EXAMPLE
 
-[see test directory](https://github.com/siarheidudko/objectstream/tree/master/test)
+[see test directory](https://github.com/siarheidudko/objectstream/tree/main/test)
 
 ## OLDER VERSIONS
 

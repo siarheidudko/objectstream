@@ -19,8 +19,16 @@
     "testv18": "docker run --name=objectstream-node18 --rm -v $PWD:/app node18:1.0.0 nyc npm run test",
     "testv20": "docker run --name=objectstream-node20 --rm -v $PWD:/app node20:1.0.0 nyc npm run test"
   },
-  "author": "Siarhei Dudko",
+  "author": {
+    "name": "Siarhei Dudko",
+    "email": "siarhei@dudko.dev",
+    "url": "https://dudko.dev"
+  },
   "funding": [
+    {
+      "type": "individual",
+      "url": "http://dudko.dev/donate"
+    },
     {
       "type": "buymeacoffee",
       "url": "https://www.buymeacoffee.com/dudko.dev"
