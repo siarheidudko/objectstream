@@ -1,6 +1,6 @@
 "use strict";
 const { describe, it } = require("node:test");
-const ObjectStream = require("../../lib/index.js");
+const ObjectStream = require("../../dist/index.js");
 const object = require("../utils/object.json");
 
 const start = "[",

@@ -1,6 +1,6 @@
 "use strict";
 const { describe, it } = require("node:test");
-const ObjectStream = require("../../lib/index.js");
+const ObjectStream = require("../../dist/index.js");
 
 describe("Stringifer: Invalid data type:", function () {
   it('err[0].message === "Incoming data type is number, require data type is pure Object!"', async () => {

@@ -1,6 +1,6 @@
 "use strict";
 const { describe, it } = require("node:test");
-const ObjectStream = require("../../lib/index.js");
+const ObjectStream = require("../../dist/index.js");
 const { deepEqual } = require("node:assert");
 
 describe("Parser: Invalid data type:", function () {

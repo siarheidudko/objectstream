@@ -1,7 +1,7 @@
 "use strict";
 const { describe, it } = require("node:test");
 const { deepEqual } = require("node:assert");
-const ObjectStream = require("../../lib/index.js");
+const ObjectStream = require("../../dist/index.js");
 
 describe("Stringifer invalid arguments:", function () {
   it("Invalid start separator", async () => {
