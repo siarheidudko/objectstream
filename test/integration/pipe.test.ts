@@ -1,6 +1,5 @@
-"use strict";
-const { describe, it } = require("node:test");
-const ObjectStream = require("../../dist/index.js");
+import { describe, it } from "node:test";
+import { Parser, Stringifer } from "../../src/index";
 
 const start = "[",
   sep = ",",
@@ -27,23 +26,25 @@ const string = JSON.stringify(object);
 const buffer = Buffer.from(string);
 
 describe("Pipe one byte:", function () {
-  const encodings = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
+  const encodings: Array<
+    "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex"
+  > = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
   const iterations = 10000;
+
   for (const encoding of encodings) {
     it(encoding + " without errors", async () => {
-      let nstring = [Buffer.from(start)];
-      let rstring = [Buffer.from("")];
-      const parser = new ObjectStream.Parser(start, sep, end);
-      const parser2 = new ObjectStream.Parser(start, sep, end);
-      const stringifer = new ObjectStream.Stringifer(start, sep, end);
-      const stringifer2 = new ObjectStream.Stringifer(
-        start,
-        sep,
-        end
-      ).setEncoding(encoding);
+      let nstring: Buffer[] = [Buffer.from(start)];
+      let rstring: Buffer[] = [Buffer.from("")];
+
+      const parser = new Parser(start, sep, end);
+      const parser2 = new Parser(start, sep, end);
+      const stringifer = new Stringifer(start, sep, end);
+      const stringifer2 = new Stringifer(start, sep, end).setEncoding(encoding);
+
       let errcount = 0;
-      const p = new Promise((res, rej) => {
-        stringifer2.on("end", function (data) {
+
+      const p = new Promise<void>((res, rej) => {
+        stringifer2.on("end", function (data?: any) {
           if (data) rstring.push(Buffer.from(data, encoding));
           const r = Buffer.concat(rstring);
           const n = Buffer.concat(nstring);
@@ -51,9 +52,11 @@ describe("Pipe one byte:", function () {
           else rej("Not Equal");
         });
       });
-      stringifer2.on("data", function (data) {
+
+      stringifer2.on("data", function (data: string) {
         if (data) rstring.push(Buffer.from(data, encoding));
       });
+
       parser
         .on("error", () => {
           errcount++;
@@ -70,6 +73,7 @@ describe("Pipe one byte:", function () {
         .on("error", () => {
           errcount++;
         });
+
       for (let i = 0; i < iterations; i++) {
         for (let j = 0; j < Buffer.byteLength(buffer); j++)
           parser.write(buffer.slice(j, j + 1));
@@ -80,21 +84,23 @@ describe("Pipe one byte:", function () {
       parser.end();
       await p;
     });
+
     if (Number.parseInt(process.versions["node"].substr(0, 2)) <= 12)
       it(encoding + " with errors", async () => {
-        let nstring = [Buffer.from(start)];
-        let rstring = [Buffer.from("")];
-        const parser = new ObjectStream.Parser(start, sep, end);
-        const parser2 = new ObjectStream.Parser(start, sep, end);
-        const stringifer = new ObjectStream.Stringifer(start, sep, end);
-        const stringifer2 = new ObjectStream.Stringifer(
-          start,
-          sep,
-          end
-        ).setEncoding(encoding);
+        let nstring: Buffer[] = [Buffer.from(start)];
+        let rstring: Buffer[] = [Buffer.from("")];
+
+        const parser = new Parser(start, sep, end);
+        const parser2 = new Parser(start, sep, end);
+        const stringifer = new Stringifer(start, sep, end);
+        const stringifer2 = new Stringifer(start, sep, end).setEncoding(
+          encoding
+        );
+
         let errcount = 0;
-        const p = new Promise((res, rej) => {
-          stringifer2.on("end", (data) => {
+
+        const p = new Promise<void>((res, rej) => {
+          stringifer2.on("end", (data?: any) => {
             if (data) rstring.push(Buffer.from(data, encoding));
             const r = Buffer.concat(rstring);
             const n = Buffer.concat(nstring);
@@ -102,9 +108,11 @@ describe("Pipe one byte:", function () {
             else rej("Not Equal");
           });
         });
-        stringifer2.on("data", (data) => {
+
+        stringifer2.on("data", (data: string) => {
           if (data) rstring.push(Buffer.from(data, encoding));
         });
+
         parser
           .on("error", () => {
             errcount++;
@@ -121,6 +129,7 @@ describe("Pipe one byte:", function () {
           .on("error", () => {
             errcount++;
           });
+
         for (let i = 0; i < iterations; i++) {
           for (let j = 0; j < Buffer.byteLength(buffer); j++)
             parser.write(buffer.slice(j, j + 1));
@@ -136,25 +145,25 @@ describe("Pipe one byte:", function () {
 });
 
 describe("Pipe with different encodings:", function () {
-  const encodings = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
+  const encodings: Array<
+    "utf8" | "utf-8" | "base64" | "latin1" | "binary" | "hex"
+  > = ["utf8", "utf-8", "base64", "latin1", "binary", "hex"];
   const iterations = 10000;
+
   for (const encoding of encodings) {
     it(encoding + " without errors", async () => {
-      let nstring = [Buffer.from(start)];
-      let rstring = [Buffer.from("")];
-      const parser = new ObjectStream.Parser(start, sep, end).setEncoding(
-        encoding
-      );
-      const parser2 = new ObjectStream.Parser(start, sep, end);
-      const stringifer = new ObjectStream.Stringifer(start, sep, end);
-      const stringifer2 = new ObjectStream.Stringifer(
-        start,
-        sep,
-        end
-      ).setEncoding(encoding);
+      let nstring: Buffer[] = [Buffer.from(start)];
+      let rstring: Buffer[] = [Buffer.from("")];
+
+      const parser = new Parser(start, sep, end).setEncoding(encoding);
+      const parser2 = new Parser(start, sep, end);
+      const stringifer = new Stringifer(start, sep, end);
+      const stringifer2 = new Stringifer(start, sep, end).setEncoding(encoding);
+
       let errcount = 0;
-      const p = new Promise((res, rej) => {
-        stringifer2.on("end", function (data) {
+
+      const p = new Promise<void>((res, rej) => {
+        stringifer2.on("end", function (data?: any) {
           if (data) rstring.push(Buffer.from(data, encoding));
           const r = Buffer.concat(rstring);
           const n = Buffer.concat(nstring);
@@ -162,9 +171,11 @@ describe("Pipe with different encodings:", function () {
           else rej("Not Equal");
         });
       });
-      stringifer2.on("data", function (data) {
+
+      stringifer2.on("data", function (data: string) {
         if (data) rstring.push(Buffer.from(data, encoding));
       });
+
       parser
         .on("error", () => {
           errcount++;
@@ -181,6 +192,7 @@ describe("Pipe with different encodings:", function () {
         .on("error", () => {
           errcount++;
         });
+
       for (let i = 0; i < iterations; i++) {
         parser.write(buffer.toString(encoding));
         if (i !== 0) nstring.push(Buffer.from(sep));
@@ -190,23 +202,23 @@ describe("Pipe with different encodings:", function () {
       parser.end();
       await p;
     });
+
     if (Number.parseInt(process.versions["node"].substr(0, 2)) <= 12)
       it(encoding + " with errors", async () => {
-        let nstring = [Buffer.from(start)];
-        let rstring = [Buffer.from("")];
-        const parser = new ObjectStream.Parser(start, sep, end).setEncoding(
+        let nstring: Buffer[] = [Buffer.from(start)];
+        let rstring: Buffer[] = [Buffer.from("")];
+
+        const parser = new Parser(start, sep, end).setEncoding(encoding);
+        const parser2 = new Parser(start, sep, end);
+        const stringifer = new Stringifer(start, sep, end);
+        const stringifer2 = new Stringifer(start, sep, end).setEncoding(
           encoding
         );
-        const parser2 = new ObjectStream.Parser(start, sep, end);
-        const stringifer = new ObjectStream.Stringifer(start, sep, end);
-        const stringifer2 = new ObjectStream.Stringifer(
-          start,
-          sep,
-          end
-        ).setEncoding(encoding);
+
         let errcount = 0;
-        const p = new Promise((res, rej) => {
-          stringifer2.on("end", (data) => {
+
+        const p = new Promise<void>((res, rej) => {
+          stringifer2.on("end", (data?: any) => {
             if (data) rstring.push(Buffer.from(data, encoding));
             const r = Buffer.concat(rstring);
             const n = Buffer.concat(nstring);
@@ -214,9 +226,11 @@ describe("Pipe with different encodings:", function () {
             else rej("Not Equal");
           });
         });
-        stringifer2.on("data", (data) => {
+
+        stringifer2.on("data", (data: string) => {
           if (data) rstring.push(Buffer.from(data, encoding));
         });
+
         parser
           .on("error", () => {
             errcount++;
@@ -233,6 +247,7 @@ describe("Pipe with different encodings:", function () {
           .on("error", () => {
             errcount++;
           });
+
         for (let i = 0; i < iterations; i++) {
           parser.write(buffer.toString(encoding));
           if (i !== 0) nstring.push(Buffer.from(sep));

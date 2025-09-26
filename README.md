@@ -9,6 +9,8 @@ Revolutionize Your JSON Handling with Streamlined Efficiency: Seamlessly Convert
 ![GitHub release](https://img.shields.io/github/release/siarheidudko/objectstream.svg)
 
 - Based on native methods of NodeJS
+- Dual package (supports both ESM and CommonJS)
+- TypeScript support with type definitions
 
 ## INSTALL
 
@@ -30,12 +32,15 @@ Revolutionize Your JSON Handling with Streamlined Efficiency: Seamlessly Convert
 ## USE
 
 ```js
-// REQUIRE OR IMPORT CLASS
-
-const Stringifer = require("@sergdudko/objectstream").Stringifer;
-const Parser = require("@sergdudko/objectstream").Parser;
-// or use import
+// ESM import
 import { Stringifer, Parser } from "@sergdudko/objectstream";
+
+// CommonJS require
+const { Stringifer, Parser } = require("@sergdudko/objectstream");
+
+// Default export (for CommonJS compatibility)
+import objectstream from "@sergdudko/objectstream";
+const { Stringifer, Parser } = objectstream;
 
 // CREATE STREAM
 

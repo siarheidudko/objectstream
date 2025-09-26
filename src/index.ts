@@ -11,7 +11,11 @@
 import { Parser } from "./classes/Parser";
 import { Stringifer } from "./classes/Stringifer";
 
-export = (module.exports = {
+// Named exports
+export { Parser, Stringifer };
+
+// Default export for CommonJS compatibility
+const objectstream = {
   /**
    * Object to String stream
    */
@@ -20,4 +24,6 @@ export = (module.exports = {
    * String to Object stream
    */
   Parser,
-});
+};
+
+export default objectstream;
