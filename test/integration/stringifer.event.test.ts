@@ -26,13 +26,14 @@ describe("Stringifer: Event handling:", function () {
     await p;
   });
 
-  it("should handle end event", async () => {
+  it("should handle readable event", async () => {
     const stringifer = new Stringifer();
     const p = new Promise<void>((res) => {
-      stringifer.once("end", () => {
+      stringifer.once("readable", () => {
         res();
       });
     });
+    stringifer.write({ test: true });
     stringifer.end();
     await p;
   });

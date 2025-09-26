@@ -26,13 +26,14 @@ describe("Parser: Event handling:", function () {
     await p;
   });
 
-  it("should handle end event", async () => {
+  it("should handle readable event", async () => {
     const parser = new Parser();
     const p = new Promise<void>((res) => {
-      parser.once("end", () => {
+      parser.once("readable", () => {
         res();
       });
     });
+    parser.write('{"test":true}');
     parser.end();
     await p;
   });

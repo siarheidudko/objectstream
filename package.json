@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "test": "tsx test/**/*.test.ts",
+    "test": "node --test --import tsx test/**/*.test.ts",
     "cov": "node_modules/.bin/nyc npm run test",
     "lint": "node_modules/.bin/eslint src/**/*.ts",
     "prebuild": "npm run lint",
