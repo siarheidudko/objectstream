@@ -351,7 +351,7 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 ## 💝 Support This Project
 
-If Redux Cluster helps you build amazing applications, consider supporting its development:
+If ObjectStream helps you build amazing applications, consider supporting its development:
 
 - ☕ **[Buy me a coffee](https://www.buymeacoffee.com/dudko.dev)**
 - 💳 **[PayPal](https://paypal.me/dudkodev)**
