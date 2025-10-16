@@ -1,6 +1,6 @@
 import { Transform } from "stream";
-import { validator } from "../utils/global";
-import { UniversalGenericFunction } from "../utils/genericFunction";
+import { validator } from "../utils/global.js";
+import { UniversalGenericFunction } from "../utils/genericFunction.js";
 
 /**
  * @class Stringifer

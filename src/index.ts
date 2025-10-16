@@ -8,8 +8,8 @@
  * @requires stream
  */
 
-import { Parser } from "./classes/Parser";
-import { Stringifer } from "./classes/Stringifer";
+import { Parser } from "./classes/Parser.js";
+import { Stringifer } from "./classes/Stringifer.js";
 
 // Named exports
 export { Parser, Stringifer };
