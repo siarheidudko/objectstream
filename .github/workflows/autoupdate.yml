@@ -15,13 +15,13 @@ jobs:
     steps:
       - name: Сheckout repo
         id: checkout_repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: "tmp"
           ref: "main"
       - name: Autoupdate
         id: autoupdate
-        uses: siarheidudko/autoupdater@v3
+        uses: siarheidudko/autoupdater@v6
         with:
           author-email: "slavianich@gmail.com"
           author-name: "Siarhei Dudko"
@@ -34,58 +34,3 @@ jobs:
           debug: "true"
           ignore-packages: |
             @types/node
-  release:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      NODE_VERSION: 22
-      VERSION: ${{ needs.update.outputs.version }}
-    needs: [update]
-    if: ${{ needs.update.outputs.updated == 'true' }}
-    steps:
-      - name: Сheckout repo
-        id: checkout_repo
-        uses: actions/checkout@v4
-        with:
-          ref: "main"
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        id: setup_node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://registry.npmjs.org"
-      - name: Cache node modules
-        id: use_cache
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install dependencies
-        id: install_ci
-        run: npm ci
-      - name: Build package
-        id: build_package
-        run: npm run build
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
-          body: |
-            see [CHANGELOG.md](https://github.com/siarheidudko/objectstream/blob/main/CHANGELOG.md)
-          draft: false
-          prerelease: false
-      - name: Publish package to NPM
-        id: npm_publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
