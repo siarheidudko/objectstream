@@ -34,3 +34,10 @@ jobs:
           debug: "true"
           ignore-packages: |
             @types/node
+  deploy:
+    needs: update
+    if: needs.update.outputs.updated == 'true'
+    uses: ./.github/workflows/build-and-deploy.yml
+    with:
+      tag: ${{ needs.update.outputs.version }}
+    secrets: inherit
