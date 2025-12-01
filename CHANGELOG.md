@@ -1,3 +1,8 @@
+# 4.0.17 / 2025-12-01
+
+### :tada: Enhancements
+- Updated dependencies: tsx
+
 # 4.0.16 / 2025-11-30
 
 ### :tada: Enhancements
