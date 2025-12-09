@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "4.0.19",
+  "version": "4.0.20",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "type": "module",
   "main": "./dist/cjs/index.js",
