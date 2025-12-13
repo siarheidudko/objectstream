@@ -81,9 +81,9 @@
   ],
   "homepage": "https://github.com/siarheidudko/objectstream",
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^9.39.2",
     "@types/node": "^24.5.2",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "nyc": "^17.1.0",
     "prettier": "^3.7.4",
     "tsx": "^4.21.0",
