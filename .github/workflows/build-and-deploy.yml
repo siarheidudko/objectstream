@@ -26,9 +26,9 @@ jobs:
       NODE_VERSION: 24
     steps:
       - name: Сheckout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Cache node modules
@@ -60,14 +60,14 @@ jobs:
         node-version: [20, 22, 24]
     steps:
       - name: Сheckout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Unarchiving dist directory
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: dist
           path: ${{ github.workspace }}/dist
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node modules
@@ -93,14 +93,14 @@ jobs:
       NODE_VERSION: 24
     steps:
       - name: Сheckout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Unarchiving dist directory
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: dist
           path: ${{ github.workspace }}/dist
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Cache node modules
@@ -136,7 +136,7 @@ jobs:
           prerelease: ${{ !!endsWith(env.RELEASE_VERSION, '-beta') }}
       - name: Set registry npm packages
         if: ${{ !endsWith(env.RELEASE_VERSION, '-beta') }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           registry-url: "https://registry.npmjs.org"
       - name: Update npm to latest version

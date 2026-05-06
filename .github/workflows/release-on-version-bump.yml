@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,8 +46,6 @@ jobs:
       - name: Force-recreate tag on main HEAD
         if: steps.bump.outputs.bumped == 'true'
         run: |
-          # autoupdater may have created this tag earlier on the autoupdate branch;
-          # we want it pinned to the merge commit on main so the release reflects what shipped.
           git tag -fa "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
           git push --force origin "${{ steps.bump.outputs.tag }}"
 
