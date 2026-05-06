@@ -5,7 +5,7 @@ A stream-based JSON parser/stringifier. Published to npm as `@sergdudko/objectst
 ## Stack
 
 - TypeScript (`tsc`), targeting CJS + ESM dual build with type declarations.
-- Node `>=16` runtime; CI tests on Node 20 and 22.
+- Node `>=16` runtime; CI tests on Node 20, 22 and 24.
 - ESLint + Prettier.
 - Test runner: `node --test` with `tsx` import (no Jest/Mocha).
 
@@ -16,7 +16,7 @@ npm run lint          # ESLint over src/**/*.ts — must exit 0
 npm run build         # Clean + tsc CJS + tsc ESM + tsc types + write package.json shim
                       # (prebuild also runs lint)
 npm test              # node --test --import tsx test/**/*.test.ts — primary suite used by autoupdate
-npm run cov           # nyc-wrapped npm test; used by PR checks on Node 20/22
+npm run cov           # nyc-wrapped npm test; used by PR checks on Node 20/22/24
 ```
 
 ## Definition of "done" for any change you make
