@@ -145,19 +145,15 @@ jobs:
 
           Run log: $RUN_URL
 
-          A Claude session is requested below to push fixes onto this branch
+          A Claude session has been dispatched to push fixes onto this branch
           so the following commands all exit 0:
 
               npm run lint
               npm run build
               npm test
 
-          Only adjust what's needed for compatibility with the updated
-          dependencies (types, renamed exports, breaking changes). Do not
-          modify product logic.
-
-          The "PR checks" workflow will re-run on each new commit to confirm
-          a green state before merge.
+          See **Actions → Claude** for progress. The "PR checks" workflow will
+          re-run on each new commit to confirm a green state before merge.
           EOF
           )
           PR_URL=$(gh pr create \
@@ -175,7 +171,20 @@ jobs:
         run: |
           gh workflow run pr-checks.yml --ref "$AUTOUPDATE_BRANCH" || true
 
-      - name: Mention @claude in a PR comment
+      - name: Dispatch Claude to fix the failed autoupdate
+        if: steps.pr_failure.outputs.pr_url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Posting a PR comment that contains "@claude" via GITHUB_TOKEN does NOT trigger
+          # claude.yml — events created by GITHUB_TOKEN don't fire downstream workflows.
+          # We dispatch claude.yml directly; workflow_dispatch is one of the exceptions.
+          gh workflow run claude.yml --ref main \
+            -f branch="$AUTOUPDATE_BRANCH" \
+            -f run_url="$RUN_URL"
+
+      - name: Post info comment on the failure PR
         if: steps.pr_failure.outputs.pr_url != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -183,30 +192,9 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           COMMENT=$(cat <<EOF
-          @claude the dependency autoupdater failed on this branch
-          (run: $RUN_URL).
+          Claude has been dispatched to fix this PR. See [Actions → Claude](${{ github.server_url }}/${{ github.repository }}/actions/workflows/claude.yml) for progress.
 
-          Push commits to this branch until ALL THREE of the following
-          exit with code 0 in your local working tree, observed via the
-          Bash tool — not inferred:
-
-              npm run lint
-              npm run build
-              npm test
-
-          Hard rules:
-          - Run those three commands yourself before every push. Do not
-            push if any of them is red.
-          - If \`npm install\` or \`npm ci\` is needed, run it first
-            with \`--no-audit --no-fund\` and confirm exit 0.
-          - Limit edits to compatibility shims (types, renamed exports,
-            breaking-change adjustments, eslint-config tweaks for new
-            rule defaults). Do NOT change product logic.
-          - Do NOT bump the package version.
-          - When all three are green, push and stop. CI's
-            \`PR checks\` workflow will re-verify on the PR.
-
-          See CLAUDE.md in the repo root for the full project conventions.
+          Failing autoupdate run: $RUN_URL
           EOF
           )
           gh pr comment "$PR_URL" --body "$COMMENT"

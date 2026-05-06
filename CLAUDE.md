@@ -49,5 +49,8 @@ If `npm install` is needed (e.g. lockfile changed), run it with `--no-audit --no
 
 ## CI quirks specific to this repo
 
-- `TOKEN_FOR_WORKFLOW` (PAT) is **not** configured. The autoupdate workflow uses `GITHUB_TOKEN` and explicitly dispatches `pr-checks.yml` after PR creation, because events created via `GITHUB_TOKEN` do not trigger downstream workflows. If you change autoupdate.yml, preserve this dispatch step.
-- Releases are wired via `release-on-version-bump.yml` (push to main → detect `package.json` version change → force-recreate `vX.Y.Z` tag on main HEAD → dispatch `build-and-deploy.yml`). Do not break this chain when editing CI.
+- `TOKEN_FOR_WORKFLOW` (PAT) is **not** configured. Several workarounds compensate:
+  - `autoupdate.yml` explicitly dispatches `pr-checks.yml` after PR creation, because events created via `GITHUB_TOKEN` don't trigger `pull_request` workflows.
+  - `autoupdate.yml` dispatches `claude.yml` directly via `workflow_dispatch` (passing `branch` and `run_url` inputs) instead of relying on an `@claude` PR comment, since a comment posted via `GITHUB_TOKEN` would not fire `issue_comment` triggers.
+  - Releases are wired via `release-on-version-bump.yml` (push to main → detect `package.json` version change → force-recreate `vX.Y.Z` tag on main HEAD → dispatch `build-and-deploy.yml`).
+- Do **not** "fix" any of the above by replacing dispatch calls with comment-based mentions — they will silently no-op without the missing PAT.
