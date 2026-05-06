@@ -16,7 +16,8 @@
     "isolatedModules": false,
     "noEmit": false,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "src",
+    "rootDir": "src",
+    "types": ["node"],
     "declaration": false
   },
   "compileOnSave": true,
