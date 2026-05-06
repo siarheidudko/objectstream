@@ -43,7 +43,6 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
           fetch-depth: 1
-
       - name: Prepare autoupdate-fix prompt
         if: github.event_name == 'workflow_dispatch'
         id: prep
@@ -80,7 +79,6 @@ jobs:
           EOF
             echo PROMPT_EOF
           } >> "$GITHUB_OUTPUT"
-
       - name: Run Claude Code
         uses: anthropics/claude-code-action@v1
         with:
@@ -88,4 +86,4 @@ jobs:
           allowed_bots: "*"
           prompt: ${{ steps.prep.outputs.prompt }}
           claude_args: |
-            --allowedTools "Edit,Write,MultiEdit,Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git fetch:*),Bash(git restore:*),Bash(git checkout:*),Bash(rm:*),Bash(mkdir:*),Bash(cat:*),Bash(ls:*)"
+            --allowedTools "Edit,Write,MultiEdit,Bash(git:*),Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(rm:*),Bash(mkdir:*),Bash(cat:*),Bash(ls:*),Bash(echo:*),Bash(grep:*),Bash(find:*),Bash(sed:*),Bash(awk:*),Bash(head:*),Bash(tail:*),Bash(diff:*),Bash(mv:*),Bash(cp:*),Bash(touch:*)"
