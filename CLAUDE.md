@@ -50,4 +50,4 @@ If `npm install` is needed (e.g. lockfile changed), run it with `--no-audit --no
 ## CI quirks specific to this repo
 
 - `TOKEN_FOR_WORKFLOW` (PAT) is **not** configured. The autoupdate workflow uses `GITHUB_TOKEN` and explicitly dispatches `pr-checks.yml` after PR creation, because events created via `GITHUB_TOKEN` do not trigger downstream workflows. If you change autoupdate.yml, preserve this dispatch step.
-- The release pipeline (`build-and-deploy.yml`) runs on its own triggers; the new autoupdate flow does not invoke it directly — release is gated on PR merge to `main`.
+- Releases are wired via `release-on-version-bump.yml` (push to main → detect `package.json` version change → force-recreate `vX.Y.Z` tag on main HEAD → dispatch `build-and-deploy.yml`). Do not break this chain when editing CI.
