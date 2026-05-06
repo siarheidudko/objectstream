@@ -9,6 +9,7 @@ test
 eslint.config.mjs
 .gitignore
 .npmignore
+CLAUDE.md
 Dockerfile
 package-lock.json
 tsconfig.json
