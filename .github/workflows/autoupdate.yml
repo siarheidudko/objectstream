@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
           git push -u origin "$AUTOUPDATE_BRANCH"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
 
@@ -177,9 +177,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          # Posting a PR comment that contains "@claude" via GITHUB_TOKEN does NOT trigger
-          # claude.yml — events created by GITHUB_TOKEN don't fire downstream workflows.
-          # We dispatch claude.yml directly; workflow_dispatch is one of the exceptions.
           gh workflow run claude.yml --ref main \
             -f branch="$AUTOUPDATE_BRANCH" \
             -f run_url="$RUN_URL"
