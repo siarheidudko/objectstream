@@ -82,14 +82,14 @@
   "homepage": "https://github.com/siarheidudko/objectstream",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.2.2",
-    "eslint": "^10.6.0",
+    "@types/node": "^26.1.1",
+    "eslint": "^10.7.0",
     "globals": "^17.7.0",
     "nyc": "^18.0.0",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.63.0"
   },
   "engines": {
     "node": ">=16"
