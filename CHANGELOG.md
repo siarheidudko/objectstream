@@ -1,3 +1,8 @@
+# 4.0.44 / 2026-07-31
+
+### :tada: Enhancements
+- Updated dependencies: globals, typescript
+
 # 4.0.42 / 2026-07-03
 
 ### :tada: Enhancements
