@@ -1,6 +1,6 @@
 {
   "name": "@sergdudko/objectstream",
-  "version": "4.0.45",
+  "version": "4.0.46",
   "description": "Creates a stream to convert json from string or convert json to string.",
   "type": "module",
   "main": "./dist/cjs/index.js",
@@ -84,12 +84,12 @@
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.2.0",
     "eslint": "^10.8.1",
-    "globals": "^17.9.0",
+    "globals": "^17.11.0",
     "nyc": "^18.0.0",
     "prettier": "^3.9.6",
-    "tsx": "^4.23.11",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.66.0"
+    "typescript-eslint": "^8.67.0"
   },
   "engines": {
     "node": ">=16"
