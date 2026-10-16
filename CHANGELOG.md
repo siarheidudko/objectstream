@@ -1,3 +1,8 @@
+# 4.0.55 / 2026-10-16
+
+### :tada: Enhancements
+- Updated dependencies: eslint, prettier, typescript-eslint
+
 # 4.0.54 / 2026-10-09
 
 ### :tada: Enhancements
